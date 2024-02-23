@@ -6,6 +6,10 @@ This repository contains the first version of QGIS Processing Trajectools plugin
 The Trajectools plugin adds trajectory analysis algorithms to the QGIS Processing toolbox. 
 This README provides essential information for setting up this Emerald.
 
+Related repositories include:
+* [T4.1 - Trajectory Data / Travel Time Analysis -- No-code Model](https://github.com/emeralds-horizon/UC3-traveltime-analytics)
+* [T4.1 - Trajectory Data / Travel Time Analysis -- Cartoblog Post](https://github.com/emeralds-horizon/Cartoblog)
+
 ## Table of Contents
 
 * [Requirements](#requirements)

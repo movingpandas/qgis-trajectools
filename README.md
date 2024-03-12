@@ -1,4 +1,4 @@
-# WP4: T4.1 - Trajectory Data / Travel Time Analysis -- Trajectools
+# WP4 Emerald: T4.1 - Trajectory Data / Travel Time Analysis -- Trajectools
 
 ## Description
 
@@ -10,13 +10,13 @@ Related repositories include:
 * [T4.1 - Trajectory Data / Travel Time Analysis -- No-code Model](https://github.com/emeralds-horizon/UC3-traveltime-analytics)
 * [T4.1 - Trajectory Data / Travel Time Analysis -- Cartoblog Post](https://github.com/emeralds-horizon/Cartoblog)
 
+
 ## Table of Contents
 
 * [Requirements](#requirements)
 * [Examples](#examples)
 * [Authors](#authors)
-
-
+  
 
 ## Requirements
 Running these models requires QGIS (a popular open source geographic information system) with MovingPandas (a Python library for movement data analysis) and the QGIS Trajectools plugin.

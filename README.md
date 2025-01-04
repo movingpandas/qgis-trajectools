@@ -21,7 +21,7 @@ The recommended way to install these dependencies is through conda/mamba:
 (base) conda create -n qgis -c conda-forge python=3.9 
 (base) conda activate qgis
 (qgis) mamba install -c conda-forge qgis movingpandas scikit-mobility stonesoup
-(qgis) pip install gtfs_functions
+(qgis) pip install gtfs_functions h3==3.7.7
 ```
 
 (More details: https://anitagraser.com/2023/01/21/pyqgis-jupyter-notebooks-on-windows-using-conda/)

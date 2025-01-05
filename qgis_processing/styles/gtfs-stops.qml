@@ -220,7 +220,7 @@
       </callout>
     </settings>
   </labeling>
-  <blendMode>0</blendMode>
-  <featureBlendMode>0</featureBlendMode>
+  <blendMode>5</blendMode>
+  <featureBlendMode>5</featureBlendMode>
   <layerGeometryType>0</layerGeometryType>
 </qgis>

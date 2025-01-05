@@ -333,3 +333,8 @@ class GtfsSegmentsAlgorithm(QgsProcessingAlgorithm):
             fields.append(QgsField("segment_max_speed_kmh", QVariant.Double))
             fields.append(QgsField("runtime_sec", QVariant.Double))
         return fields
+
+    def postProcessAlgorithm(self, context, feedback):
+        seg_layer = QgsProcessingUtils.mapLayerFromString(self.dest_segments, context)
+        seg_layer.loadNamedStyle(os.path.join(pluginPath, "styles", "gtfs-segments.qml"))
+        return {self.OUTPUT: self.dest_segments}

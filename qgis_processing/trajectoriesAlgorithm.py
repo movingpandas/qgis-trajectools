@@ -162,6 +162,7 @@ class TrajectoriesAlgorithm(QgsProcessingAlgorithm):
 
 
 class TrajectoryManipulationAlgorithm(TrajectoriesAlgorithm):
+    FIELDS_TO_ADD = "FIELDS_TO_ADD"
     OUTPUT_PTS = "OUTPUT_PTS"
     OUTPUT_SEGS = "OUTPUT_SEGS"
     OUTPUT_TRAJS = "OUTPUT_TRAJS"
@@ -182,6 +183,16 @@ class TrajectoryManipulationAlgorithm(TrajectoriesAlgorithm):
                 type=QgsProcessing.TypeVectorLine,
             )
         )
+        self.addParameter(
+            QgsProcessingParameterField(
+                name=self.FIELDS_TO_ADD,
+                description=self.tr("Fields to add to trajectories (line) layer"),
+                parentLayerParameterName=self.INPUT,
+                type=QgsProcessingParameterField.Any,
+                allowMultiple=True,
+                optional=True,
+            )
+        )
 
     def processAlgorithm(self, parameters, context, feedback):
         tc, crs = self.create_tc(parameters, context)
@@ -195,7 +206,10 @@ class TrajectoryManipulationAlgorithm(TrajectoriesAlgorithm):
         return {self.OUTPUT_PTS: self.dest_pts, self.OUTPUT_TRAJS: self.dest_trajs}
 
     def setup_traj_sink(self, parameters, context, crs):
-        self.fields_trajs = self.get_traj_fields()
+        self.fields_to_add = self.parameterAsFields(
+            parameters, self.FIELDS_TO_ADD, context
+        )
+        self.fields_trajs = self.get_traj_fields(fields_to_add=self.fields_to_add)
         (self.sink_trajs, self.dest_trajs) = self.parameterAsSink(
             parameters,
             self.OUTPUT_TRAJS,
@@ -242,9 +256,12 @@ class TrajectoryManipulationAlgorithm(TrajectoriesAlgorithm):
         fields.append(QgsField(f"length_{length_units}", QVariant.Double))
         fields.append(QgsField(f"speed_{speed_units}", QVariant.Double))
         for field in fields_to_add:
-            i = fields.indexFromName(field.name())
-            if i < 0:
-                fields.append(field)
+            if isinstance(field, str):
+                if fields.indexFromName(field) < 0:
+                    fields.append(self.input_layer.fields().field(field))
+            else:
+                if fields.indexFromName(field.name()) < 0:
+                    fields.append(field)
         return fields
 
     def traj_to_sink(self, traj, attr_mean_to_add=[], attr_first_to_add=[]):
@@ -257,6 +274,7 @@ class TrajectoryManipulationAlgorithm(TrajectoriesAlgorithm):
         length = traj.get_length(units=self.speed_units[0])
         speed = length / (duration / TIME_FACTOR[self.speed_units[1]])
         attrs = [traj.id, start_time, end_time, duration, length, speed]
+        attr_first_to_add = self.fields_to_add + attr_first_to_add
         for a in attr_mean_to_add:
             attrs.append(float(traj.df[a].mean()))
         for a in attr_first_to_add:

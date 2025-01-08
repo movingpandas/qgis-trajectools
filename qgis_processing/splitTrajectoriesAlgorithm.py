@@ -1,12 +1,18 @@
 import sys
 import pandas as pd
 
-from movingpandas import TemporalSplitter, ObservationGapSplitter, StopSplitter
+from movingpandas import (
+    TemporalSplitter, 
+    ObservationGapSplitter, 
+    StopSplitter, 
+    ValueChangeSplitter,
+)
 
 from qgis.core import (
     QgsProcessingParameterString,
     QgsProcessingParameterEnum,
     QgsProcessingParameterNumber,
+    QgsProcessingParameterField,
 )
 
 sys.path.append("..")
@@ -199,6 +205,53 @@ class StopSplitterAlgorithm(SplitTrajectoriesAlgorithm):
             splits = StopSplitter(traj).split(
                 max_diameter=max_diameter, min_duration=min_duration
             )
+            self.tc_to_sink(splits)
+            for split in splits:
+                self.traj_to_sink(split)
+
+
+class ValueChangeSplitterAlgorithm(SplitTrajectoriesAlgorithm):
+    FIELD = "FIELD"
+
+    def __init__(self):
+        super().__init__()
+
+    def initAlgorithm(self, config=None):
+        super().initAlgorithm(config)
+        self.addParameter(
+            QgsProcessingParameterField(
+                name=self.FIELD,
+                description=self.tr("Field to check for changing values"),
+                parentLayerParameterName=self.INPUT,
+                type=QgsProcessingParameterField.Any,
+                allowMultiple=False,
+                optional=False,
+            )
+        )
+
+    def name(self):
+        return "split_value_change"
+
+    def displayName(self):
+        return self.tr("Split trajectories when field value changes")
+
+    def shortHelpString(self):
+        return self.tr(
+            "<p>Splits trajectories into subtrajectories "
+            "whenever there is a change in the specified field's value.</p>"
+            "<p>For more information on trajectory splitters see: "
+            "https://movingpandas.readthedocs.io/en/main/api/trajectorysplitter.html</p>"
+            "<p><b>Speed</b> is calculated based on the input layer CRS information and "
+            "converted to the desired speed units. For more info on the supported units, "
+            "see https://movingpandas.org/units</p>"
+            "<p><b>Direction</b> is calculated between consecutive locations. Direction "
+            "values are in degrees, starting North turning clockwise.</p>"
+        )
+
+    def processTc(self, tc, parameters, context):
+        self.field = self.parameterAsFields(parameters, self.FIELD, context)[0]
+        for traj in tc.trajectories:
+            splits = ValueChangeSplitter(traj).split(col_name=self.field)
             self.tc_to_sink(splits)
             for split in splits:
                 self.traj_to_sink(split)

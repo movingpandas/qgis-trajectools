@@ -13,6 +13,7 @@ from .splitTrajectoriesAlgorithm import (
     ObservationGapSplitterAlgorithm,
     TemporalSplitterAlgorithm,
     StopSplitterAlgorithm,
+    ValueChangeSplitterAlgorithm,
 )
 from .overlayAlgorithm import (
     ClipTrajectoriesByExtentAlgorithm,
@@ -89,6 +90,7 @@ class TrajectoolsProvider(QgsProcessingProvider):
             ObservationGapSplitterAlgorithm(),
             TemporalSplitterAlgorithm(),
             StopSplitterAlgorithm(),
+            ValueChangeSplitterAlgorithm(),
             ClipTrajectoriesByExtentAlgorithm(),
             ClipTrajectoriesByPolygonLayerAlgorithm(),
             IntersectWithPolygonLayerAlgorithm(),

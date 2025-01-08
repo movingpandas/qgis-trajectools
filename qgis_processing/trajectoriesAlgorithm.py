@@ -186,7 +186,7 @@ class TrajectoryManipulationAlgorithm(TrajectoriesAlgorithm):
         self.addParameter(
             QgsProcessingParameterField(
                 name=self.FIELDS_TO_ADD,
-                description=self.tr("Fields to add"),
+                description=self.tr("Fields to add to trajectories (line) layer"),
                 parentLayerParameterName=self.INPUT,
                 type=QgsProcessingParameterField.Any,
                 allowMultiple=True,

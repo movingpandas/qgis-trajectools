@@ -233,7 +233,7 @@ class ValueChangeSplitterAlgorithm(SplitTrajectoriesAlgorithm):
         return "split_value_change"
 
     def displayName(self):
-        return self.tr("Split trajectories when field value changes")
+        return self.tr("Split trajectories at field value change")
 
     def shortHelpString(self):
         return self.tr(

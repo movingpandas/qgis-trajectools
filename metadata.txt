@@ -3,7 +3,7 @@ name=Trajectools
 description=Processing tools for handling trajectory data 
 about=Trajectools adds trajectory analysis algorithms to the QGIS Processing toolbox. Trajectools requires MovingPandas (a Python library for movement data analysis) and optionally integrates scikit-mobility (for privacy tests), stonesoup (for smoothing), and gtfs_functions (for GTFS data support). See the plugin homepage for installation recommendations. Sample data for testing the functionality is provided with the plugin download. 
 category=Plugins
-version=2.3
+version=2.4
 qgisMinimumVersion=3.0
 qgisMaximumVersion=4.0
 
@@ -20,7 +20,13 @@ repository=https://github.com/movingpandas/qgis-trajectools
 experimental=False
 deprecated=False
 
-changelog=2.3
+changelog=2.4
+    - Added GTFS algorithms for extracting stops, fixes #43
+    - Added default output styles for GTFS stops and segments
+    - Added Trajectory splitting at field value changes
+    - Added option to add selected fields to output trajectories layer, fixes #53
+    - Improved UI of the split by observation gap algorithm, fixes #36
+    2.3
     - Added generalizers and cleaners
     - Added smoother (requires stonesoup)
     - Fixed stop detection double input, fixes #40

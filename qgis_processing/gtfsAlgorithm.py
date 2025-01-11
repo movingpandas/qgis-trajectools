@@ -239,7 +239,7 @@ class GtfsSegmentsAlgorithm(QgsProcessingAlgorithm):
         return self.tr(
             "<p>Extracts segments from a GTFS ZIP file using "
             "gtfs_functions.Feed.segments</p>"
-            "<p>Optionally adds scheduled average speeds using"
+            "<p>Optionally adds scheduled average speeds using "
             "gtfs_functions.Feed.avg_speeds</p>"
         )
 

@@ -46,7 +46,7 @@ The Trajectools plugin can be installed directly in QGIS using the built-in Plug
 
 **Figure 1: QGIS Plugin Manager with Trajectools plugin installed.**
 
-![toolbox](screenshots/toolbox.PNG)
+![Trajectools Toolbox](screenshots/toolbox.PNG)
 
 **Figure 2: Trajectools (v2.4) algorithms in the QGIS Processing toolbox**
 
@@ -54,11 +54,13 @@ The Trajectools plugin can be installed directly in QGIS using the built-in Plug
 
 The individual Trajectools algorithms are flexible and modular and can therefore be used on a wide array on input datasets, including, for example, the open [Microsoft Geolife dataset](http://research.microsoft.com/en-us/downloads/b16d359d-d164-469e-9fd4-daa38f2b2e13/) a [sample](https://github.com/emeralds-horizon/trajectools-qgis/tree/main/sample_data) of which is included in the plugin repo:
 
-![image](https://github.com/movingpandas/qgis-processing-trajectory/assets/590385/3040ce90-552e-43a5-8660-17628f9b813a)
+![Trajectools Create Trajectory](https://github.com/movingpandas/qgis-processing-trajectory/assets/590385/3040ce90-552e-43a5-8660-17628f9b813a)
 
-![Trajectools clipping screenshot](screenshots/trajectools2.PNG)
+![Trajectools Clip Trajectory](screenshots/trajectools2.PNG)
 
-![image](https://github.com/user-attachments/assets/e3bbf2e5-e551-4f3e-bd29-8d19bdc33137)
+![Trajectools Kalman Filter Smoothing](https://github.com/user-attachments/assets/e3bbf2e5-e551-4f3e-bd29-8d19bdc33137)
+
+![Trajectools GTFS Extract Segments](https://github.com/user-attachments/assets/62a6e60c-dedc-4e90-8059-2679302346db)
 
 
 ## Citation information

@@ -3,7 +3,7 @@
 [![View Jupyter Notebook](https://img.shields.io/badge/QGIS-Plugin%20repo-green.svg)](https://plugins.qgis.org/plugins/processing_trajectory/)
 [![Zenodo badge](https://zenodo.org/badge/DOI/10.5281/zenodo.13847642.svg)](https://doi.org/10.5281/zenodo.13847642)
 
-The Trajectools plugin adds trajectory analysis algorithms to the QGIS Processing toolbox. 
+The Trajectools plugin adds mobility data analysis algorithms to the QGIS Processing toolbox. 
 
 ![trajectools](https://github.com/movingpandas/qgis-processing-trajectory/assets/590385/218acb03-41be-4ea0-aee4-b773911d58f9)
 

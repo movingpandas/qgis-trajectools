@@ -13,12 +13,46 @@ from .splitTrajectoriesAlgorithm import (
     ObservationGapSplitterAlgorithm,
     TemporalSplitterAlgorithm,
     StopSplitterAlgorithm,
+    ValueChangeSplitterAlgorithm,
 )
 from .overlayAlgorithm import (
     ClipTrajectoriesByExtentAlgorithm,
-    ClipTrajectoriesByPolygonLayer,
+    ClipTrajectoriesByPolygonLayerAlgorithm,
+    IntersectWithPolygonLayerAlgorithm,
 )
-from .extractPtsAlgorithm import ExtractODPtsAlgorithm, ExtractStopsAlgorithm
+from .extractPtsAlgorithm import (
+    ExtractODPtsAlgorithm, 
+    ExtractStopsAlgorithm,
+)
+from .generalizationAlgorithm import (
+    DouglasPeuckerGeneralizerAlgorithm,
+    MinDistanceGeneralizerAlgorithm,
+    MinTimeDeltaGeneralizerAlgorithm,
+    TopDownTimeRatioGeneralizerAlgorithm,
+)
+from .cleaningAlgorithm import (
+    OutlierCleanerAlgorithm,
+)
+
+try:  # skmob-based algs
+    from .privacyAttackAlgorithm import HomeWorkAttack
+except ImportError:
+    pass
+
+try:  # gtfs_functions-based algs
+    from .gtfsAlgorithm import (
+        GtfsStopsAlgorithm,
+        GtfsShapesAlgorithm, 
+        GtfsSegmentsAlgorithm
+    )
+except ImportError:
+    pass
+
+try:  # stonesoup-based algs
+    from .smoothingAlgorithm import KalmanSmootherAlgorithm
+except ImportError:
+    pass
+
 
 pluginPath = os.path.dirname(__file__)
 
@@ -56,11 +90,32 @@ class TrajectoolsProvider(QgsProcessingProvider):
             ObservationGapSplitterAlgorithm(),
             TemporalSplitterAlgorithm(),
             StopSplitterAlgorithm(),
+            ValueChangeSplitterAlgorithm(),
             ClipTrajectoriesByExtentAlgorithm(),
-            ClipTrajectoriesByPolygonLayer(),
+            ClipTrajectoriesByPolygonLayerAlgorithm(),
+            IntersectWithPolygonLayerAlgorithm(),
             ExtractODPtsAlgorithm(),
             ExtractStopsAlgorithm(),
+            DouglasPeuckerGeneralizerAlgorithm(),
+            MinDistanceGeneralizerAlgorithm(),
+            MinTimeDeltaGeneralizerAlgorithm(),
+            TopDownTimeRatioGeneralizerAlgorithm(),
+            OutlierCleanerAlgorithm(),
         ]
+        try:  # skmob-based algs
+            algs.append(HomeWorkAttack())
+        except NameError:
+            pass
+        try:  # gtfs_functions-based algs
+            algs.append(GtfsStopsAlgorithm())
+            algs.append(GtfsShapesAlgorithm())
+            algs.append(GtfsSegmentsAlgorithm())
+        except NameError:
+            pass
+        try:  # stonesoup-based algs
+            algs.append(KalmanSmootherAlgorithm())
+        except NameError:
+            pass
         return algs
 
     def loadAlgorithms(self):

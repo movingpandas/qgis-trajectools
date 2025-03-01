@@ -1,6 +1,11 @@
 # QGIS Trajectools
 
-[![View Jupyter Notebook](https://img.shields.io/badge/QGIS-Plugin%20repo-green.svg)](https://plugins.qgis.org/plugins/processing_trajectory/)
+<a href="__add_your_repository_url_here__">
+    <img alt="Get it on Codeberg" src="https://get-it-on.codeberg.org/get-it-on-blue-on-white.png" height="60" align="right">
+</a>
+
+[![QGIS Plugin Repo](https://img.shields.io/badge/QGIS-Plugin%20repo-green.svg)](https://plugins.qgis.org/plugins/processing_trajectory/)
+[![Issue Tracker](https://img.shields.io/badge/Issue_tracker-Codeberg-blue.svg)](https://codeberg.org/movingpandas/trajectools/issues) 
 [![Zenodo badge](https://zenodo.org/badge/DOI/10.5281/zenodo.13847642.svg)](https://doi.org/10.5281/zenodo.13847642)
 
 The Trajectools plugin adds mobility data analysis algorithms to the QGIS Processing toolbox. 

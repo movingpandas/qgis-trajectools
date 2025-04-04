@@ -56,6 +56,10 @@ class ClipTrajectoriesByExtentAlgorithm(OverlayTrajectoriesAlgorithm):
             "see https://movingpandas.org/units</p>"
             "<p><b>Direction</b> is calculated between consecutive locations. Direction "
             "values are in degrees, starting North turning clockwise.</p>"
+            "<p><b>Minimum trajectory length</b> is the desired minimum length of output "
+            "trajectories, calculated using CRS units, except if the CRS is geographic "
+            "(e.g. EPSG:4326 WGS84) then length is calculated in meters. "
+            "(Shorter trajectories are discarded.)</p>"  
         )
 
     def helpUrl(self):
@@ -101,6 +105,10 @@ class ClipTrajectoriesByPolygonLayerAlgorithm(OverlayTrajectoriesAlgorithm):
             "see https://movingpandas.org/units</p>"
             "<p><b>Direction</b> is calculated between consecutive locations. Direction "
             "values are in degrees, starting North turning clockwise.</p>"
+            "<p><b>Minimum trajectory length</b> is the desired minimum length of output "
+            "trajectories, calculated using CRS units, except if the CRS is geographic "
+            "(e.g. EPSG:4326 WGS84) then length is calculated in meters. "
+            "(Shorter trajectories are discarded.)</p>"  
         )
 
     def helpUrl(self):
@@ -154,6 +162,10 @@ class IntersectWithPolygonLayerAlgorithm(OverlayTrajectoriesAlgorithm):
             "see https://movingpandas.org/units</p>"
             "<p><b>Direction</b> is calculated between consecutive locations. Direction "
             "values are in degrees, starting North turning clockwise.</p>"
+            "<p><b>Minimum trajectory length</b> is the desired minimum length of output "
+            "trajectories, calculated using CRS units, except if the CRS is geographic "
+            "(e.g. EPSG:4326 WGS84) then length is calculated in meters. "
+            "(Shorter trajectories are discarded.)</p>"  
         )
 
     def helpUrl(self):

@@ -84,7 +84,7 @@ class ObservationGapSplitterAlgorithm(SplitTrajectoriesAlgorithm):
             "<p><b>Minimum trajectory length</b> is the desired minimum length of output "
             "trajectories, calculated using CRS units, except if the CRS is geographic "
             "(e.g. EPSG:4326 WGS84) then length is calculated in meters. "
-            "(Shorter trajectories are discarded.)"
+            "(Shorter trajectories are discarded.)</p>"
         )
 
     def processTc(self, tc, parameters, context):
@@ -145,7 +145,7 @@ class TemporalSplitterAlgorithm(SplitTrajectoriesAlgorithm):
             "<p><b>Minimum trajectory length</b> is the desired minimum length of output "
             "trajectories, calculated using CRS units, except if the CRS is geographic "
             "(e.g. EPSG:4326 WGS84) then length is calculated in meters. "
-            "(Shorter trajectories are discarded.)"
+            "(Shorter trajectories are discarded.)</p>"
         )
 
     def processTc(self, tc, parameters, context):
@@ -206,7 +206,7 @@ class StopSplitterAlgorithm(SplitTrajectoriesAlgorithm):
             "<p><b>Minimum trajectory length</b> is the desired minimum length of output "
             "trajectories, calculated using CRS units, except if the CRS is geographic "
             "(e.g. EPSG:4326 WGS84) then length is calculated in meters. "
-            "(Shorter trajectories are discarded.)"
+            "(Shorter trajectories are discarded.)</p>"
         )
 
     def processTc(self, tc, parameters, context):
@@ -261,7 +261,7 @@ class ValueChangeSplitterAlgorithm(SplitTrajectoriesAlgorithm):
             "<p><b>Minimum trajectory length</b> is the desired minimum length of output "
             "trajectories, calculated using CRS units, except if the CRS is geographic "
             "(e.g. EPSG:4326 WGS84) then length is calculated in meters. "
-            "(Shorter trajectories are discarded.)"           
+            "(Shorter trajectories are discarded.)</p>"           
         )
 
     def processTc(self, tc, parameters, context):

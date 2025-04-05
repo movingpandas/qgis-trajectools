@@ -57,6 +57,10 @@ class TrajectoriesAlgorithm(QgsProcessingAlgorithm):
     def createInstance(self):
         return type(self)()
 
+    def flags(self):
+        super().flags()
+        return  QgsProcessingAlgorithm.FlagNoThreading
+
     def initAlgorithm(self, config=None):
         self.addParameter(
             QgsProcessingParameterFeatureSource(

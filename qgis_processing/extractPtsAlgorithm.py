@@ -1,3 +1,4 @@
+import os
 import sys
 
 import shapely.wkt
@@ -202,7 +203,7 @@ class ExtractStopsAlgorithm(TrajectoriesAlgorithm):
         min_duration = self.parameterAsString(parameters, self.MIN_DURATION, context)
         min_duration = pd.Timedelta(min_duration).to_pytimedelta()
 
-        gdf = TrajectoryStopDetector(tc).get_stop_points(
+        gdf = TrajectoryStopDetector(tc, n_threads=os.cpu_count()).get_stop_points(
             max_diameter=max_diameter, min_duration=min_duration
         )
         gdf = gdf.convert_dtypes()

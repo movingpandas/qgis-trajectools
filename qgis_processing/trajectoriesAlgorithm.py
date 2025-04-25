@@ -144,8 +144,9 @@ class TrajectoriesAlgorithm(QgsProcessingAlgorithm):
                 "The resulting trajectory collection is empty. Check that the trajectory ID and timestamp fields have been configured correctly."
             )
 
-        tc.add_speed(units=tuple(self.speed_units), overwrite=True)
-        tc.add_direction(overwrite=True)
+        cpus = os.cpu_count()
+        tc.add_speed(units=tuple(self.speed_units), overwrite=True, n_threads=cpus)
+        tc.add_direction(overwrite=True, n_threads=cpus)
         return tc, crs
 
     def get_pt_fields(self, fields_to_add=[]):

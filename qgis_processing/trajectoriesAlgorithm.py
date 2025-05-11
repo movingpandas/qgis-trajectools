@@ -35,6 +35,8 @@ TIME_FACTOR = {
     "a": 3600 * 24 * 365,
 }
 
+CPU_COUNT = os.cpu_count()
+
 
 class TrajectoriesAlgorithm(QgsProcessingAlgorithm):
     INPUT = "INPUT"
@@ -156,9 +158,8 @@ class TrajectoriesAlgorithm(QgsProcessingAlgorithm):
             )
 
         if self.add_metrics:
-            cpus = os.cpu_count()
-            tc.add_speed(units=tuple(self.speed_units), overwrite=True, n_threads=cpus)
-            tc.add_direction(overwrite=True, n_threads=cpus)
+            tc.add_speed(units=tuple(self.speed_units), overwrite=True, n_processes=CPU_COUNT)
+            tc.add_direction(overwrite=True, n_processes=CPU_COUNT)
         return tc, crs
 
     def get_pt_fields(self, fields_to_add=[]):

@@ -76,3 +76,14 @@ def feature_from_gdf_row(row):
     #    QgsMessageLog.logMessage(str(type(v)), "Trajectools", level=Qgis.Info )
     f.setAttributes(values)
     return f
+
+
+def feature_from_df_row(row):
+    f = QgsFeature()
+    try:
+        f.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(row["geom_x"], row["geom_y"])))
+    except:
+        raise(KeyError(str(row)))
+    values = row.values.tolist()[:-1]
+    f.setAttributes(values)
+    return f    

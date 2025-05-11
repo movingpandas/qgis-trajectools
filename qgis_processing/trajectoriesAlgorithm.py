@@ -13,6 +13,7 @@ from qgis.core import (
     QgsWkbTypes,
     QgsProcessingParameterString,
     QgsProcessingParameterNumber,
+    QgsProcessingParameterBoolean,
     QgsField,
     QgsFields,
     QgsFeature,
@@ -22,7 +23,7 @@ from qgis.core import (
 
 sys.path.append("..")
 
-from .qgisUtils import tc_from_pt_layer, feature_from_gdf_row, df_from_pt_layer
+from .qgisUtils import tc_from_pt_layer, feature_from_gdf_row, feature_from_df_row, df_from_pt_layer
 
 pluginPath = os.path.dirname(__file__)
 
@@ -39,6 +40,7 @@ class TrajectoriesAlgorithm(QgsProcessingAlgorithm):
     INPUT = "INPUT"
     TRAJ_ID_FIELD = "TRAJ_ID_FIELD"
     TIMESTAMP_FIELD = "TIME_FIELD"
+    ADD_METRICS = "ADD_METRICS"
     SPEED_UNIT = "SPEED_UNIT"
     MIN_LENGTH = "MIN_LENGTH"
 
@@ -92,6 +94,14 @@ class TrajectoriesAlgorithm(QgsProcessingAlgorithm):
             )
         )
         self.addParameter(
+            QgsProcessingParameterBoolean(
+                name=self.ADD_METRICS,
+                description=self.tr("Add movement metrics (speed, direction)"),
+                defaultValue=True,
+                optional=False,
+            )
+        )        
+        self.addParameter(
             QgsProcessingParameterString(
                 name=self.SPEED_UNIT,
                 description=self.tr("Speed units (e.g. km/h, m/s)"),
@@ -130,6 +140,7 @@ class TrajectoriesAlgorithm(QgsProcessingAlgorithm):
             parameters, self.SPEED_UNIT, context
         ).split("/")
         self.min_length = self.parameterAsDouble(parameters, self.MIN_LENGTH, context)
+        self.add_metrics = self.parameterAsBoolean(parameters, self.ADD_METRICS, context)
 
     def create_tc(self, parameters, context):
         self.prepare_parameters(parameters, context)
@@ -144,9 +155,10 @@ class TrajectoriesAlgorithm(QgsProcessingAlgorithm):
                 "The resulting trajectory collection is empty. Check that the trajectory ID and timestamp fields have been configured correctly."
             )
 
-        cpus = os.cpu_count()
-        tc.add_speed(units=tuple(self.speed_units), overwrite=True, n_threads=cpus)
-        tc.add_direction(overwrite=True, n_threads=cpus)
+        if self.add_metrics:
+            cpus = os.cpu_count()
+            tc.add_speed(units=tuple(self.speed_units), overwrite=True, n_threads=cpus)
+            tc.add_direction(overwrite=True, n_threads=cpus)
         return tc, crs
 
     def get_pt_fields(self, fields_to_add=[]):
@@ -201,13 +213,9 @@ class TrajectoryManipulationAlgorithm(TrajectoriesAlgorithm):
 
     def processAlgorithm(self, parameters, context, feedback):
         tc, crs = self.create_tc(parameters, context)
-
         self.setup_pt_sink(parameters, context, tc, crs)
-
         self.setup_traj_sink(parameters, context, crs)
-
         self.processTc(tc, parameters, context)
-
         return {self.OUTPUT_PTS: self.dest_pts, self.OUTPUT_TRAJS: self.dest_trajs}
 
     def setup_traj_sink(self, parameters, context, crs):
@@ -225,12 +233,13 @@ class TrajectoryManipulationAlgorithm(TrajectoriesAlgorithm):
         )
 
     def setup_pt_sink(self, parameters, context, tc, crs):
-        self.fields_pts = self.get_pt_fields(
-            [
+        fields_to_add = []
+        if self.add_metrics:
+            fields_to_add = [
                 QgsField(tc.get_speed_col(), QVariant.Double),
                 QgsField(tc.get_direction_col(), QVariant.Double),
-            ],
-        )
+            ]
+        self.fields_pts = self.get_pt_fields(fields_to_add)
         (self.sink_pts, self.dest_pts) = self.parameterAsSink(
             parameters,
             self.OUTPUT_PTS,
@@ -299,16 +308,16 @@ class TrajectoryManipulationAlgorithm(TrajectoriesAlgorithm):
 
     def tc_to_sink(self, tc, field_names_to_add=[]):
         try:
-            gdf = tc.to_point_gdf()
+            dfs = tc.to_point_gdf()
         except ValueError:  # when the tc is empty
             return
-        gdf[self.timestamp_field] = gdf.index.astype(str)
+        dfs[self.timestamp_field] = dfs.index.astype(str)
         names = [field.name() for field in self.fields_pts]
         for field_name in field_names_to_add:
             names.append(field_name)      
         names.append("geometry")
-        gdf = gdf[names]
+        dfs = dfs[names]
 
-        for _, row in gdf.iterrows():
+        for _, row in dfs.iterrows():
             f = feature_from_gdf_row(row)
             self.sink_pts.addFeature(f, QgsFeatureSink.FastInsert)

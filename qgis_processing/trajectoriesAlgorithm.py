@@ -95,31 +95,7 @@ class TrajectoriesAlgorithm(QgsProcessingAlgorithm):
                 optional=False,
             )
         )
-        self.addParameter(
-            QgsProcessingParameterBoolean(
-                name=self.ADD_METRICS,
-                description=self.tr("Add movement metrics (speed, direction)"),
-                defaultValue=True,
-                optional=False,
-            )
-        )        
-        self.addParameter(
-            QgsProcessingParameterString(
-                name=self.SPEED_UNIT,
-                description=self.tr("Speed units (e.g. km/h, m/s)"),
-                defaultValue="km/h",
-                optional=False,
-            )
-        )
-        self.addParameter(
-            QgsProcessingParameterNumber(
-                name=self.MIN_LENGTH,
-                description=self.tr("Minimum trajectory length"),
-                defaultValue=0,
-                # optional=True,
-                minValue=0,
-            )
-        )
+
 
     def create_df(self, parameters, context):
         self.prepare_parameters(parameters, context)
@@ -211,6 +187,31 @@ class TrajectoryManipulationAlgorithm(TrajectoriesAlgorithm):
                 optional=True,
             )
         )
+        self.addParameter(
+            QgsProcessingParameterBoolean(
+                name=self.ADD_METRICS,
+                description=self.tr("Add movement metrics (speed, direction)"),
+                defaultValue=True,
+                optional=False,
+            )
+        )        
+        self.addParameter(
+            QgsProcessingParameterString(
+                name=self.SPEED_UNIT,
+                description=self.tr("Speed units (e.g. km/h, m/s)"),
+                defaultValue="km/h",
+                optional=False,
+            )
+        )
+        self.addParameter(
+            QgsProcessingParameterNumber(
+                name=self.MIN_LENGTH,
+                description=self.tr("Minimum trajectory length"),
+                defaultValue=0,
+                # optional=True,
+                minValue=0,
+            )
+        )
 
     def processAlgorithm(self, parameters, context, feedback):
         tc, crs = self.create_tc(parameters, context)
@@ -254,8 +255,9 @@ class TrajectoryManipulationAlgorithm(TrajectoriesAlgorithm):
         pass  # needs to be implemented by each splitter
 
     def postProcessAlgorithm(self, context, feedback):
-        pts_layer = QgsProcessingUtils.mapLayerFromString(self.dest_pts, context)
-        pts_layer.loadNamedStyle(os.path.join(pluginPath, "styles", "pts.qml"))
+        if self.add_metrics:
+            pts_layer = QgsProcessingUtils.mapLayerFromString(self.dest_pts, context)
+            pts_layer.loadNamedStyle(os.path.join(pluginPath, "styles", "pts.qml"))
         traj_layer = QgsProcessingUtils.mapLayerFromString(self.dest_trajs, context)
         traj_layer.loadNamedStyle(os.path.join(pluginPath, "styles", "traj.qml"))
         return {self.OUTPUT_PTS: self.dest_pts, self.OUTPUT_TRAJS: self.dest_trajs}

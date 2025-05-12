@@ -172,12 +172,13 @@ class IntersectWithPolygonLayerAlgorithm(OverlayTrajectoriesAlgorithm):
         return "https://movingpandas.org/units"
 
     def setup_pt_sink(self, parameters, context, tc, crs):        
-        self.fields_pts = self.get_pt_fields(
-            [
+        fields_to_add = []
+        if self.add_metrics:
+            fields_to_add = [
                 QgsField(tc.get_speed_col(), QVariant.Double),
                 QgsField(tc.get_direction_col(), QVariant.Double),
-            ],
-        )
+            ]
+        self.fields_pts = self.get_pt_fields(fields_to_add)
 
         vlayer = self.parameterAsVectorLayer(parameters, self.OVERLAY_LAYER, context)
         for field in vlayer.fields():

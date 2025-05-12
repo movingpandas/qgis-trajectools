@@ -20,12 +20,13 @@ from qgis.core import (
 from qgis.core import QgsMessageLog, Qgis
 
 import pandas as pd
+from geopandas import GeoDataFrame
 from movingpandas import TrajectoryStopDetector
 
 sys.path.append("..")
 
 from .trajectoriesAlgorithm import TrajectoriesAlgorithm
-from .qgisUtils import feature_from_gdf_row
+from .qgisUtils import feature_from_gdf_row, feature_from_df_row
 
 
 CPU_COUNT = os.cpu_count()
@@ -73,12 +74,14 @@ class ExtractODPtsAlgorithm(TrajectoriesAlgorithm):
     def processAlgorithm(self, parameters, context, feedback):
         tc, crs = self.create_tc(parameters, context)
 
-        self.fields_pts = self.get_pt_fields(
-            [
+        fields_to_add = []
+        if self.add_metrics:
+            fields_to_add = [
                 QgsField(tc.get_speed_col(), QVariant.Double),
                 QgsField(tc.get_direction_col(), QVariant.Double),
-            ],
-        )
+            ]
+        self.fields_pts = self.get_pt_fields(fields_to_add)
+
         (self.sink_orig, self.orig_pts) = self.parameterAsSink(
             parameters,
             self.ORIGIN_PTS,
@@ -111,7 +114,7 @@ class ExtractODPtsAlgorithm(TrajectoriesAlgorithm):
         names.append("geometry")
         gdf = gdf[names]
         # QgsMessageLog.logMessage(str(gdf), "Trajectools", level=Qgis.Info )
-
+                
         for _, row in gdf.iterrows():
             f = feature_from_gdf_row(row)
             self.sink_orig.addFeature(f, QgsFeatureSink.FastInsert)

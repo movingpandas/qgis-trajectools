@@ -23,7 +23,13 @@ from qgis.core import (
 
 sys.path.append("..")
 
-from .qgisUtils import tc_from_pt_layer, feature_from_gdf_row, feature_from_df_row, df_from_pt_layer
+from .qgisUtils import (
+    set_multiprocess_path,
+    tc_from_pt_layer, 
+    feature_from_gdf_row, 
+    feature_from_df_row, 
+    df_from_pt_layer, 
+)
 
 pluginPath = os.path.dirname(__file__)
 
@@ -48,6 +54,7 @@ class TrajectoriesAlgorithm(QgsProcessingAlgorithm):
 
     def __init__(self):
         super().__init__()
+        set_multiprocess_path()
 
     def icon(self):
         return QIcon(os.path.join(pluginPath, "icons", "mpd.png"))

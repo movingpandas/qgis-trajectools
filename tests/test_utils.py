@@ -22,7 +22,6 @@ def test_dataset_availability():
 
 def test_tc_from_pt_layer():
     vl = QgsVectorLayer(TESTDATA, "test data")
-    tc = tc_from_pt_layer(vl, TIME_COL, ID_COL, TIME_FORMAT)
-    print(tc)
+    tc = tc_from_pt_layer(vl, TIME_COL, ID_COL)
     assert len(tc)==5
 

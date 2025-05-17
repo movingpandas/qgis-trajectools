@@ -1,3 +1,4 @@
+import os
 import sys
 import pandas as pd
 
@@ -18,6 +19,9 @@ from qgis.core import (
 sys.path.append("..")
 
 from .trajectoriesAlgorithm import TrajectoryManipulationAlgorithm
+
+
+CPU_COUNT = os.cpu_count()
 
 
 class SplitTrajectoriesAlgorithm(TrajectoryManipulationAlgorithm):
@@ -95,7 +99,11 @@ class ObservationGapSplitterAlgorithm(SplitTrajectoriesAlgorithm):
             td_units = "W"
         time_gap = pd.Timedelta(f"{time_gap} {td_units}").to_pytimedelta()
         for traj in tc.trajectories:
-            splits = ObservationGapSplitter(traj).split(gap=time_gap, min_length=tc.min_length)
+            splits = ObservationGapSplitter(traj).split(
+                gap=time_gap, 
+                min_length=tc.min_length, 
+                n_processes=CPU_COUNT
+            )
             self.tc_to_sink(splits)
             for split in splits:
                 self.traj_to_sink(split)
@@ -151,11 +159,14 @@ class TemporalSplitterAlgorithm(SplitTrajectoriesAlgorithm):
     def processTc(self, tc, parameters, context):
         split_mode = self.parameterAsInt(parameters, self.SPLIT_MODE, context)
         split_mode = self.SPLIT_MODE_OPTIONS[split_mode]
-        for traj in tc.trajectories:
-            splits = TemporalSplitter(traj).split(mode=split_mode, min_length=tc.min_length)
-            self.tc_to_sink(splits)
-            for split in splits:
-                self.traj_to_sink(split)
+        splits = TemporalSplitter(tc).split(
+                mode=split_mode, 
+                min_length=tc.min_length, 
+                n_processes=CPU_COUNT
+            )    
+        self.tc_to_sink(splits)
+        for split in splits:
+            self.traj_to_sink(split)
 
 
 class StopSplitterAlgorithm(SplitTrajectoriesAlgorithm):
@@ -213,13 +224,15 @@ class StopSplitterAlgorithm(SplitTrajectoriesAlgorithm):
         max_diameter = self.parameterAsDouble(parameters, self.MAX_DIAMETER, context)
         min_duration = self.parameterAsString(parameters, self.MIN_DURATION, context)
         min_duration = pd.Timedelta(min_duration).to_pytimedelta()
-        for traj in tc.trajectories:
-            splits = StopSplitter(traj).split(
-                max_diameter=max_diameter, min_duration=min_duration, min_length=tc.min_length
-            )
-            self.tc_to_sink(splits)
-            for split in splits:
-                self.traj_to_sink(split)
+        splits = StopSplitter(tc).split(
+            max_diameter=max_diameter, 
+            min_duration=min_duration, 
+            min_length=tc.min_length, 
+            n_processes=CPU_COUNT
+        )
+        self.tc_to_sink(splits)
+        for split in splits:
+            self.traj_to_sink(split)
 
 
 class ValueChangeSplitterAlgorithm(SplitTrajectoriesAlgorithm):
@@ -267,7 +280,11 @@ class ValueChangeSplitterAlgorithm(SplitTrajectoriesAlgorithm):
     def processTc(self, tc, parameters, context):
         self.field = self.parameterAsFields(parameters, self.FIELD, context)[0]
         for traj in tc.trajectories:
-            splits = ValueChangeSplitter(traj).split(col_name=self.field, min_length=tc.min_length)
+            splits = ValueChangeSplitter(traj).split(
+                col_name=self.field, 
+                min_length=tc.min_length, 
+                n_processes=CPU_COUNT
+            )
             self.tc_to_sink(splits)
             for split in splits:
                 self.traj_to_sink(split)

@@ -1,5 +1,8 @@
 import sys
+import platform
+import multiprocessing
 import pandas as pd
+from os import path
 from pyproj import CRS
 from qgis.core import (
     QgsFeature,
@@ -19,6 +22,65 @@ except ImportError as error:
         "please install MovingPandas. For details see: "
         "https://github.com/movingpandas/qgis-processing-trajectory."
     ) from error
+
+
+def set_multiprocess_path():
+    # This function is courtesy of the SemiAutomaticClassificationPlugin
+    # Copyright (C) 2012-2024 by Luca Congedo
+
+    python_path = None
+    system_platform = platform.system()
+    if system_platform == 'Windows':
+        try:
+            python_path = path.abspath(
+                path.join(sys.exec_prefix, 'pythonw.exe')
+            )
+            if path.isfile(python_path):
+                multiprocessing.set_executable(python_path)
+            else:
+                # from https://trac.osgeo.org/osgeo4w/ticket/392
+                python_path = path.abspath(
+                    path.join(sys.exec_prefix, '../../bin/pythonw.exe')
+                )
+                if path.isfile(python_path):
+                    multiprocessing.set_executable(python_path)
+                else:
+                    qgis_utils.iface.messageBar().pushMessage(
+                        'Semi-Automatic Classification Plugin',
+                        QApplication.translate(
+                            'semiautomaticclassificationplugin',
+                            'Error. Python library not found'
+                        ),
+                        level=Qgis.Info
+                    )
+        except Exception as err:
+            str(err)
+    elif system_platform == 'Darwin':
+        try:
+            python_path = path.abspath(
+                path.join(sys.exec_prefix, 'bin', 'python3')
+            )
+            if path.isfile(python_path):
+                multiprocessing.set_executable(python_path)
+            else:
+                python_path = path.abspath(
+                    path.join(
+                        sys.exec_prefix, '../Resources/bin/python3'
+                    )
+                )
+                if path.isfile(python_path):
+                    multiprocessing.set_executable(python_path)
+                else:
+                    qgis_utils.iface.messageBar().pushMessage(
+                        'Semi-Automatic Classification Plugin',
+                        QApplication.translate(
+                            'semiautomaticclassificationplugin',
+                            'Error. Python library not found'
+                        ),
+                        level=Qgis.Info
+                    )
+        except Exception as err:
+            str(err)
 
 
 def trajectories_from_qgis_point_layer(

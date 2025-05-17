@@ -16,14 +16,14 @@ The Trajectools plugin adds mobility data analysis algorithms to the QGIS Proces
 
 ## Requirements
 
-Trajectools requires [MovingPandas](https://github.com/movingpandas/movingpandas) >= 0.21.2 and optionally integrates [scikit-mobility](https://scikit-mobility.github.io/scikit-mobility/) (for privacy tests), [stonesoup](https://stonesoup.readthedocs.io/) (for smoothing), and [gtfs_functions](https://github.com/Bondify/gtfs_functions) (for GTFS data support). 
+Trajectools requires [MovingPandas](https://github.com/movingpandas/movingpandas) >= 0.22.3 and optionally integrates [scikit-mobility](https://scikit-mobility.github.io/scikit-mobility/) (for privacy tests), [stonesoup](https://stonesoup.readthedocs.io/) (for smoothing), and [gtfs_functions](https://github.com/Bondify/gtfs_functions) (for GTFS data support). 
 
 ### Conda install
 
 The recommended way to install these dependencies is through conda/mamba:
 
 ```
-(base) conda create -n qgis -c conda-forge python=3.9 
+(base) conda create -n qgis -c conda-forge python=3.11 
 (base) conda activate qgis
 (qgis) mamba install -c conda-forge qgis movingpandas scikit-mobility stonesoup
 (qgis) pip install gtfs_functions h3

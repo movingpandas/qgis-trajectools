@@ -21,7 +21,7 @@ experimental=False
 deprecated=False
 
 changelog=2.6
-    - Implemented parallel processing support, see #70
+    - Implemented parallel processing support, see #67 and #70
     - Made speed and direction computation optional, fixes #69
     2.5.1
     - Fixed crashes #65

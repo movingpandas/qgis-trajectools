@@ -25,11 +25,13 @@ __copyright__ = '(C) 2025, Anita Graser'
 
 __revision__ = '$Format:%H$'
 
-MIN_MPD_VERSION = '0.22.3'
 
+
+from packaging.version import Version
 from movingpandas import __version__ as mpd_version
 
-if mpd_version <= MIN_MPD_VERSION:
+MIN_MPD_VERSION = '0.22.3'
+if Version(mpd_version) < Version(MIN_MPD_VERSION):
     raise(RuntimeError(f'Please update MovingPandas to >={MIN_MPD_VERSION}'))
 
 from .qgis_processing.trajectoolsProviderPlugin import TrajectoryProviderPlugin

@@ -11,7 +11,6 @@ QGIS_APP_RESOURCES_PATH := /Applications/MacPorts/QGIS3.app/Contents/Resources
 # Or for a virtual environment: /path/to/your/venv/lib/pythonX.Y/site-packages
 SYSTEM_SITE_PACKAGES := /opt/local/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages
 
-
 # QGIS core Python libraries
 QGIS_PYTHON_DIR := $(QGIS_APP_RESOURCES_PATH)/python
 
@@ -56,6 +55,7 @@ ZIP_FILE := ./$(ZIP_FILE_NAME)
 ADDITIONAL_PYTHONPATH := $(QGIS_PYTHON_DIR)
 ADDITIONAL_PYTHONPATH := $(ADDITIONAL_PYTHONPATH):$(QGIS_PLUGINS_DIR)
 ADDITIONAL_PYTHONPATH := $(ADDITIONAL_PYTHONPATH):$(SYSTEM_SITE_PACKAGES)
+ADDITIONAL_PYTHONPATH := $(ADDITIONAL_PYTHONPATH):$(PLUGIN_SRC_DIR)
 
 ifeq ($(strip $(PYTHONPATH)),)
   export PYTHONPATH := $(ADDITIONAL_PYTHONPATH)

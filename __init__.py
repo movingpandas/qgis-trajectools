@@ -4,8 +4,8 @@
 ***************************************************************************
     trajectoolsProviderPlugin.py
     ---------------------
-    Date                 : February 2024
-    Copyright            : (C) 2024 by Anita Graser
+    Date                 : February 2025
+    Copyright            : (C) 2025 by Anita Graser
     Email                : anitagraser@gmx.at
 ***************************************************************************
 *                                                                         *
@@ -18,15 +18,23 @@
 """
 
 __author__ = 'Anita Graser'
-__date__ = 'Feb 2024'
-__copyright__ = '(C) 2024, Anita Graser'
+__date__ = 'May 2025'
+__copyright__ = '(C) 2025, Anita Graser'
 
 # This will get replaced with a git SHA1 when you do a git archive
 
 __revision__ = '$Format:%H$'
 
-from .qgis_processing.trajectoolsProviderPlugin import TrajectoryProviderPlugin
 
+
+from packaging.version import Version
+from movingpandas import __version__ as mpd_version
+
+MIN_MPD_VERSION = '0.22.3'
+if Version(mpd_version) < Version(MIN_MPD_VERSION):
+    raise(RuntimeError(f'Please update MovingPandas to >={MIN_MPD_VERSION}'))
+
+from .qgis_processing.trajectoolsProviderPlugin import TrajectoryProviderPlugin
 
 def classFactory(iface):
     return TrajectoryProviderPlugin()

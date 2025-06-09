@@ -3,7 +3,7 @@ name=Trajectools
 description=Processing tools for handling trajectory data 
 about=Trajectools adds trajectory analysis algorithms to the QGIS Processing toolbox. Trajectools requires MovingPandas >= 0.22.3 and optionally integrates scikit-mobility (for privacy tests), stonesoup (for smoothing), and gtfs_functions (for GTFS data support). See the plugin homepage for installation recommendations. Sample data for testing the functionality is provided with the plugin download. 
 category=Plugins
-version=2.6
+version=2.6.1
 qgisMinimumVersion=3.0
 qgisMaximumVersion=4.0
 
@@ -20,12 +20,16 @@ repository=https://codeberg.org/movingpandas/trajectools
 experimental=False
 deprecated=False
 
-changelog=2.6
+changelog=2.6.1
+    - Added minimum MovingPandas version warning
+    2.6
+    - Set minimum MovingPandas version to 0.22.3
     - Implemented parallel processing support, see #67 and #70
     - Made speed and direction computation optional, fixes #69
     2.5.1
     - Fixed crashes #65
     2.5
+    - Set mimimum MovingPandas version to 0.21.3
     - Fixed splitters ignoring Minimum trajectory length settings, see #63
     - Fixed Split at field value change algorithm output CRS issues, fixes #61
     - Added description of Minimum trajectory length to help strings, fixes #62

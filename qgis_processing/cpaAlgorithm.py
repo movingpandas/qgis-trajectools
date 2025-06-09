@@ -6,6 +6,7 @@ from qgis.core import (
     QgsProcessingParameterVectorLayer,
     QgsProcessingParameterNumber,
     QgsProcessingParameterString,
+    QgsProcessingParameterCrs,
     QgsProcessingParameterFeatureSink,
     QgsProcessing,
     QgsWkbTypes,
@@ -20,11 +21,23 @@ from .trajectoriesAlgorithm import TrajectoriesAlgorithm
 
 class CPAAlgorithm(TrajectoriesAlgorithm):
     CLOSEST_POINT_OF_APPROACH = "CLOSEST_POINT_OF_APPROACH"
+    CALCULATION_CRS = "EPSG:3857"
+
     def __init__(self):
         super().__init__()
 
     def initAlgorithm(self, config=None):
         super().initAlgorithm(config)
+
+        # Input CRS parameter
+        self.addParameter(
+            QgsProcessingParameterCrs(
+                self.CALCULATION_CRS,
+                "Projection used for calculation",
+                # Use a projected coordinate system for calculations
+                defaultValue="EPSG:3857",
+            )
+        )
         self.addParameter(
             QgsProcessingParameterFeatureSink(
                 name=self.CLOSEST_POINT_OF_APPROACH,

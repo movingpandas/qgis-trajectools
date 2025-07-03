@@ -70,8 +70,9 @@ The individual Trajectools algorithms are flexible and modular and can therefore
 
 ## Presentations
 
-* [Graser, A. (2025). Trajectools: analyzing anything that moves. QGIS User Conference 2025, 2-3 June 2025, Norrköping, Sweden.](https://youtu.be/T7haF1DPy2U)
-   [![Trajectools presentation at QGISUC2025](screenshots/trajectoos-qgisuc25.png)](https://youtu.be/T7haF1DPy2U)
+[**Trajectools: analyzing anything that moves.** QGIS User Conference 2025, 2-3 June 2025, Norrköping, Sweden.](https://youtu.be/T7haF1DPy2U)
+
+[![Trajectools presentation at QGISUC2025](screenshots/trajectoos-qgisuc25.png)](https://youtu.be/T7haF1DPy2U)
 
 
 ## Citation information

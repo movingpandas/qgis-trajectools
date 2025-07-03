@@ -68,9 +68,13 @@ The individual Trajectools algorithms are flexible and modular and can therefore
 ![Trajectools GTFS Extract Segments](https://github.com/user-attachments/assets/62a6e60c-dedc-4e90-8059-2679302346db)
 
 
+## Presentations
+
+* [Graser, A. (2025). Trajectools: analyzing anything that moves. QGIS User Conference 2025, 2-3 June 2025, Norrköping, Sweden.](https://youtu.be/T7haF1DPy2U)
+   [![Trajectools presentation at QGISUC2025](screenshots/trajectoos-qgisuc25.png)](https://youtu.be/T7haF1DPy2U)
+
+
 ## Citation information
-
-
 
 Please cite [0] when using Trajectools in your research and reference the appropriate release version using the Zenodo DOI: https://doi.org/10.5281/zenodo.13847642
 

@@ -4,6 +4,8 @@ import multiprocessing
 import pandas as pd
 from os import path
 from pyproj import CRS
+from datetime import datetime
+
 from qgis.core import (
     QgsFeature,
     QgsGeometry,
@@ -134,6 +136,9 @@ def feature_from_gdf_row(row):
     f = QgsFeature()
     f.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(row.geometry.x, row.geometry.y)))
     values = row.values.tolist()[:-1]
+    for i, value in enumerate(values):
+        if isinstance(value, datetime):
+            values[i] = QDateTime.fromSecsSinceEpoch(int(value.timestamp()))
     # for v in values:
     #    QgsMessageLog.logMessage(str(type(v)), "Trajectools", level=Qgis.Info )
     f.setAttributes(values)

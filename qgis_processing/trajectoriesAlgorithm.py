@@ -1,7 +1,7 @@
 import os
 import sys
 
-from qgis.PyQt.QtCore import QCoreApplication, QVariant
+from qgis.PyQt.QtCore import QCoreApplication, QVariant, QDateTime, Qt
 from qgis.PyQt.QtGui import QIcon
 from qgis.core import (
     QgsProcessing,
@@ -27,7 +27,6 @@ from .qgisUtils import (
     set_multiprocess_path,
     tc_from_pt_layer, 
     feature_from_gdf_row, 
-    feature_from_df_row, 
     df_from_pt_layer, 
 )
 
@@ -153,6 +152,8 @@ class TrajectoriesAlgorithm(QgsProcessingAlgorithm):
             elif field.name() == self.traj_id_field:
                 # we need to make sure the ID field is String
                 fields.append(QgsField(self.traj_id_field, QVariant.String))
+            elif field.name() == self.timestamp_field:
+                fields.append(QgsField(self.timestamp_field, QVariant.DateTime))
             else:
                 fields.append(field)
         for field in fields_to_add:
@@ -274,8 +275,8 @@ class TrajectoryManipulationAlgorithm(TrajectoriesAlgorithm):
         speed_units = f"{self.speed_units[0]}{self.speed_units[1]}"
         fields = QgsFields()
         fields.append(QgsField(self.traj_id_field, QVariant.String))
-        fields.append(QgsField("start_time", QVariant.String))
-        fields.append(QgsField("end_time", QVariant.String))
+        fields.append(QgsField("start_time", QVariant.DateTime))
+        fields.append(QgsField("end_time", QVariant.DateTime))
         fields.append(QgsField("duration_seconds", QVariant.Double))
         fields.append(QgsField(f"length_{length_units}", QVariant.Double))
         fields.append(QgsField(f"speed_{speed_units}", QVariant.Double))
@@ -293,7 +294,9 @@ class TrajectoryManipulationAlgorithm(TrajectoriesAlgorithm):
         f = QgsFeature()
         f.setGeometry(line)
         start_time = traj.get_start_time().isoformat()
+        start_time = QDateTime.fromString(start_time, Qt.ISODate)
         end_time = traj.get_end_time().isoformat()
+        end_time = QDateTime.fromString(end_time, Qt.ISODate)
         duration = float(traj.get_duration().total_seconds())
         length = traj.get_length(units=self.speed_units[0])
         speed = length / (duration / TIME_FACTOR[self.speed_units[1]])
@@ -321,7 +324,8 @@ class TrajectoryManipulationAlgorithm(TrajectoriesAlgorithm):
             dfs = tc.to_point_gdf()
         except ValueError:  # when the tc is empty
             return
-        dfs[self.timestamp_field] = dfs.index.astype(str)
+        dfs[self.timestamp_field] = dfs.index
+
         names = [field.name() for field in self.fields_pts]
         for field_name in field_names_to_add:
             names.append(field_name)      

@@ -1,8 +1,8 @@
 import os
 import sys
 
-import shapely.wkt
-from shapely.geometry import Polygon
+import pandas as pd
+from movingpandas import TrajectoryStopDetector
 
 from qgis.PyQt.QtCore import QCoreApplication, QVariant
 from qgis.core import (
@@ -19,14 +19,10 @@ from qgis.core import (
 )
 from qgis.core import QgsMessageLog, Qgis
 
-import pandas as pd
-from geopandas import GeoDataFrame
-from movingpandas import TrajectoryStopDetector
-
 sys.path.append("..")
 
 from .trajectoriesAlgorithm import TrajectoriesAlgorithm
-from .qgisUtils import feature_from_gdf_row, feature_from_df_row
+from .qgisUtils import feature_from_gdf_row
 
 
 CPU_COUNT = os.cpu_count()
@@ -186,8 +182,8 @@ class ExtractStopsAlgorithm(TrajectoriesAlgorithm):
 
         self.fields_pts = QgsFields()
         self.fields_pts.append(QgsField("stop_id", QVariant.String))
-        self.fields_pts.append(QgsField("start_time", QVariant.String))  # .DateTime))
-        self.fields_pts.append(QgsField("end_time", QVariant.String))  # .DateTime))
+        self.fields_pts.append(QgsField("start_time", QVariant.DateTime))
+        self.fields_pts.append(QgsField("end_time", QVariant.DateTime))
         self.fields_pts.append(QgsField("traj_id", QVariant.String))
         self.fields_pts.append(QgsField("duration_s", QVariant.Double))
 
@@ -214,8 +210,6 @@ class ExtractStopsAlgorithm(TrajectoriesAlgorithm):
         )
         gdf = gdf.convert_dtypes()
         gdf["stop_id"] = gdf.index.astype(str)
-        gdf["start_time"] = gdf["start_time"].astype(str)
-        gdf["end_time"] = gdf["end_time"].astype(str)
 
         names = [field.name() for field in self.fields_pts]
         names.append("geometry")

@@ -138,7 +138,7 @@ def feature_from_gdf_row(row):
     values = row.values.tolist()[:-1]
     for i, value in enumerate(values):
         if isinstance(value, datetime):
-            values[i] = QDateTime.fromSecsSinceEpoch(int(value.timestamp()))
+            values[i] = QDateTime(value)
     # for v in values:
     #    QgsMessageLog.logMessage(str(type(v)), "Trajectools", level=Qgis.Info )
     f.setAttributes(values)

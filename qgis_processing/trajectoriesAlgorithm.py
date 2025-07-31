@@ -1,7 +1,7 @@
 import os
 import sys
 
-from qgis.PyQt.QtCore import QCoreApplication, QVariant, QDateTime, Qt
+from qgis.PyQt.QtCore import QCoreApplication, QVariant, QDateTime
 from qgis.PyQt.QtGui import QIcon
 from qgis.core import (
     QgsProcessing,
@@ -293,10 +293,8 @@ class TrajectoryManipulationAlgorithm(TrajectoriesAlgorithm):
         line = QgsGeometry.fromWkt(traj.to_linestringm_wkt())
         f = QgsFeature()
         f.setGeometry(line)
-        start_time = traj.get_start_time().isoformat()
-        start_time = QDateTime.fromString(start_time, Qt.ISODate)
-        end_time = traj.get_end_time().isoformat()
-        end_time = QDateTime.fromString(end_time, Qt.ISODate)
+        start_time = QDateTime(traj.get_start_time())
+        end_time = QDateTime(traj.get_end_time())
         duration = float(traj.get_duration().total_seconds())
         length = traj.get_length(units=self.speed_units[0])
         speed = length / (duration / TIME_FACTOR[self.speed_units[1]])

@@ -205,9 +205,13 @@ class ExtractStopsAlgorithm(TrajectoriesAlgorithm):
         min_duration = self.parameterAsString(parameters, self.MIN_DURATION, context)
         min_duration = pd.Timedelta(min_duration).to_pytimedelta()
 
-        gdf = TrajectoryStopDetector(tc, n_processes=CPU_COUNT).get_stop_points(
-            max_diameter=max_diameter, min_duration=min_duration
-        )
+        try: 
+            gdf = TrajectoryStopDetector(tc, n_processes=CPU_COUNT).get_stop_points(
+                max_diameter=max_diameter, min_duration=min_duration
+            )
+        except TypeError:
+            raise TypeError("TypeError: cannot pickle 'QVariant' object. This error is usually caused by None values in input layer fields. Try to remove None values or run without Add movement metrics.")
+          
         gdf = gdf.convert_dtypes()
         gdf["stop_id"] = gdf.index.astype(str)
 

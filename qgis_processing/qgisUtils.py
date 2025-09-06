@@ -99,7 +99,7 @@ def df_from_pt_layer(layer, time_field_name, trajectory_id_field):
         my_dict = {}
         for i, a in enumerate(feature.attributes()):
             # QgsMessageLog.logMessage(f"{names[i]} | {time_field_name}", "Trajectools", level=Qgis.Info )
-            if names[i] == time_field_name:  # and type(a) == "QDateTime":
+            if names[i] == time_field_name:  
                 try:
                     a = a.toPyDateTime()
                 except:

@@ -140,8 +140,12 @@ class TrajectoriesAlgorithm(QgsProcessingAlgorithm):
             )
 
         if self.add_metrics:
-            tc.add_speed(units=tuple(self.speed_units), overwrite=True, n_processes=CPU_COUNT)
-            tc.add_direction(overwrite=True, n_processes=CPU_COUNT)
+            try:
+                tc.add_speed(units=tuple(self.speed_units), overwrite=True, n_processes=CPU_COUNT)
+                tc.add_direction(overwrite=True, n_processes=CPU_COUNT)
+            except TypeError:  # None values cause TypeError: cannot pickle 'QVariant' object, see issue #93
+                raise TypeError("TypeError: cannot pickle 'QVariant' object. This error is usually caused by None values in input layer fields. Try to remove None values or run without Add movement metrics.")
+
         return tc, crs
 
     def get_pt_fields(self, fields_to_add=[]):

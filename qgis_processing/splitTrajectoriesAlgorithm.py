@@ -99,11 +99,15 @@ class ObservationGapSplitterAlgorithm(SplitTrajectoriesAlgorithm):
             td_units = "W"
         time_gap = pd.Timedelta(f"{time_gap} {td_units}").to_pytimedelta()
         for traj in tc.trajectories:
-            splits = ObservationGapSplitter(traj).split(
-                gap=time_gap, 
-                min_length=tc.min_length, 
-                n_processes=CPU_COUNT
-            )
+            try: 
+                splits = ObservationGapSplitter(traj).split(
+                    gap=time_gap, 
+                    min_length=tc.min_length, 
+                    n_processes=CPU_COUNT
+                )
+            except TypeError:
+                raise TypeError("TypeError: cannot pickle 'QVariant' object. This error is usually caused by None values in input layer fields. Try to remove None values or run without Add movement metrics.")
+        
             self.tc_to_sink(splits)
             for split in splits:
                 self.traj_to_sink(split)
@@ -159,11 +163,14 @@ class TemporalSplitterAlgorithm(SplitTrajectoriesAlgorithm):
     def processTc(self, tc, parameters, context):
         split_mode = self.parameterAsInt(parameters, self.SPLIT_MODE, context)
         split_mode = self.SPLIT_MODE_OPTIONS[split_mode]
-        splits = TemporalSplitter(tc).split(
-                mode=split_mode, 
-                min_length=tc.min_length, 
-                n_processes=CPU_COUNT
-            )    
+        try:
+            splits = TemporalSplitter(tc).split(
+                    mode=split_mode, 
+                    min_length=tc.min_length, 
+                    n_processes=CPU_COUNT
+                )    
+        except TypeError:
+            raise TypeError("TypeError: cannot pickle 'QVariant' object. This error is usually caused by None values in input layer fields. Try to remove None values or run without Add movement metrics.")
         self.tc_to_sink(splits)
         for split in splits:
             self.traj_to_sink(split)
@@ -224,12 +231,16 @@ class StopSplitterAlgorithm(SplitTrajectoriesAlgorithm):
         max_diameter = self.parameterAsDouble(parameters, self.MAX_DIAMETER, context)
         min_duration = self.parameterAsString(parameters, self.MIN_DURATION, context)
         min_duration = pd.Timedelta(min_duration).to_pytimedelta()
-        splits = StopSplitter(tc).split(
-            max_diameter=max_diameter, 
-            min_duration=min_duration, 
-            min_length=tc.min_length, 
-            n_processes=CPU_COUNT
-        )
+        try: 
+            splits = StopSplitter(tc).split(
+                max_diameter=max_diameter, 
+                min_duration=min_duration, 
+                min_length=tc.min_length, 
+                n_processes=CPU_COUNT
+            )
+        except TypeError:
+            raise TypeError("TypeError: cannot pickle 'QVariant' object. This error is usually caused by None values in input layer fields. Try to remove None values or run without Add movement metrics.")
+
         self.tc_to_sink(splits)
         for split in splits:
             self.traj_to_sink(split)
@@ -280,11 +291,15 @@ class ValueChangeSplitterAlgorithm(SplitTrajectoriesAlgorithm):
     def processTc(self, tc, parameters, context):
         self.field = self.parameterAsFields(parameters, self.FIELD, context)[0]
         for traj in tc.trajectories:
-            splits = ValueChangeSplitter(traj).split(
-                col_name=self.field, 
-                min_length=tc.min_length, 
-                n_processes=CPU_COUNT
-            )
+            try: 
+                splits = ValueChangeSplitter(traj).split(
+                    col_name=self.field, 
+                    min_length=tc.min_length, 
+                    n_processes=CPU_COUNT
+                )
+            except TypeError:
+                raise TypeError("TypeError: cannot pickle 'QVariant' object. This error is usually caused by None values in input layer fields. Try to remove None values or run without Add movement metrics.")
+
             self.tc_to_sink(splits)
             for split in splits:
                 self.traj_to_sink(split)

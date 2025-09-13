@@ -121,7 +121,7 @@ def tc_from_pt_layer(layer, time_field_name, trajectory_id_field, min_length=0):
 
 def tc_from_df(df, time_field_name, trajectory_id_field, crs, min_length=0):
     tc = TrajectoryCollection(
-        df,
+        df.drop(columns='geometry'),  # Fixes Error when attribute table contains geometry column #44
         traj_id_col=trajectory_id_field,
         x="geom_x",
         y="geom_y",

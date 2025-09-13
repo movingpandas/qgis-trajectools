@@ -153,6 +153,8 @@ class TrajectoriesAlgorithm(QgsProcessingAlgorithm):
         for field in self.input_layer.fields():
             if field.name() == "fid":
                 continue
+            elif field.name() == "geometry":
+                continue  # Fixes Error when attribute table contains geometry column #44
             elif field.name() == self.traj_id_field:
                 # we need to make sure the ID field is String
                 fields.append(QgsField(self.traj_id_field, QVariant.String))

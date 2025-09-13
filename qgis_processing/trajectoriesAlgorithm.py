@@ -87,7 +87,7 @@ class TrajectoriesAlgorithm(QgsProcessingAlgorithm):
                 parentLayerParameterName=self.INPUT,
                 type=QgsProcessingParameterField.Any,
                 allowMultiple=False,
-                optional=False,
+                optional=True,
             )
         )
         self.addParameter(

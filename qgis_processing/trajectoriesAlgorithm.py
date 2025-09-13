@@ -42,6 +42,24 @@ TIME_FACTOR = {
 
 CPU_COUNT = os.cpu_count()
 
+help_str_base = (
+    "<p><b>Trajectory ID field</b> is the input layer field containing the ID "
+    "of the moving objects. If no field is specified, all input features are "
+    "assigned to a single moving object. </p>"
+    "<p><b>Timestamp field</b> is the input layer field the position time. "
+    "Datetime fields are preferred but we will attempt to parse string fields "
+    "using Pandas' built-in parser.</p>")
+help_str_traj = (
+    "<p><b>Minimum trajectory length</b> is the desired minimum length of output "
+    "trajectories, calculated using CRS units, except if the CRS is geographic "
+    "(e.g. EPSG:4326 WGS84) then length is calculated in meters. "
+    "(Shorter trajectories are discarded.)</p>"      
+    "<p><b>Speed</b> is calculated based on the input layer CRS information and "
+    "converted to the desired speed units. For more info on the supported units, "
+    "see https://movingpandas.org/units.</p>"
+    "<p><b>Direction</b> is calculated between consecutive locations. Direction "
+    "values are in degrees, starting North turning clockwise.</p>"
+)
 
 class TrajectoriesAlgorithm(QgsProcessingAlgorithm):
     INPUT = "INPUT"

@@ -21,7 +21,7 @@ from qgis.core import QgsMessageLog, Qgis
 
 sys.path.append("..")
 
-from .trajectoriesAlgorithm import TrajectoriesAlgorithm
+from .trajectoriesAlgorithm import TrajectoriesAlgorithm, help_str_base
 from .qgisUtils import feature_from_gdf_row
 
 
@@ -65,7 +65,7 @@ class ExtractODPtsAlgorithm(TrajectoriesAlgorithm):
         return self.tr("Extract OD points")
 
     def shortHelpString(self):
-        return self.tr("<p>Extracts start and/or end points of trajectories.</p>")
+        return self.tr("<p>Extracts start and/or end points of trajectories.</p>"+help_str_base)
 
     def processAlgorithm(self, parameters, context, feedback):
         tc, crs = self.create_tc(parameters, context)
@@ -175,7 +175,7 @@ class ExtractStopsAlgorithm(TrajectoriesAlgorithm):
         return self.tr("Extract stop points")
 
     def shortHelpString(self):
-        return self.tr("<p>Extracts stop points from trajectories.</p>")
+        return self.tr("<p>Extracts stop points from trajectories.</p>"+help_str_base)
 
     def processAlgorithm(self, parameters, context, feedback):
         tc, crs = self.create_tc(parameters, context)

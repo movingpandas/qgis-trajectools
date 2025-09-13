@@ -2,7 +2,7 @@ import sys
 
 sys.path.append("..")
 
-from .trajectoriesAlgorithm import TrajectoryManipulationAlgorithm
+from .trajectoriesAlgorithm import TrajectoryManipulationAlgorithm, help_str_base, help_str_traj
 
 
 class CreateTrajectoriesAlgorithm(TrajectoryManipulationAlgorithm):
@@ -24,12 +24,7 @@ class CreateTrajectoriesAlgorithm(TrajectoryManipulationAlgorithm):
     def shortHelpString(self):
         return self.tr(
             "<p>Creates a trajectory point layers with speed and direction information "
-            "as well as a trajectory line layer.</p>"
-            "<p><b>Speed</b> is calculated based on the input layer CRS information and "
-            "converted to the desired speed units. For more info on the supported units, "
-            "see https://movingpandas.org/units</p>"
-            "<p><b>Direction</b> is calculated between consecutive locations. Direction "
-            "values are in degrees, starting North turning clockwise.</p>"
+            "as well as a trajectory line layer.</p>"+help_str_base+help_str_traj
         )
 
     def helpUrl(self):

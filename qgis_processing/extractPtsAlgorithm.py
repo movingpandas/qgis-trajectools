@@ -25,9 +25,6 @@ from .trajectoriesAlgorithm import TrajectoriesAlgorithm, help_str_base
 from .qgisUtils import feature_from_gdf_row
 
 
-CPU_COUNT = os.cpu_count()
-
-
 class ExtractODPtsAlgorithm(TrajectoriesAlgorithm):
     ORIGIN_PTS = "ORIGIN_PTS"
     DESTINATIONS_PTS = "DESTINATIONS_PTS"
@@ -206,7 +203,7 @@ class ExtractStopsAlgorithm(TrajectoriesAlgorithm):
         min_duration = pd.Timedelta(min_duration).to_pytimedelta()
 
         try: 
-            gdf = TrajectoryStopDetector(tc, n_processes=CPU_COUNT).get_stop_points(
+            gdf = TrajectoryStopDetector(tc, n_processes=self.cpu_count).get_stop_points(
                 max_diameter=max_diameter, min_duration=min_duration
             )
         except TypeError:

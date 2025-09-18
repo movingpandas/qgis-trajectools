@@ -40,8 +40,6 @@ TIME_FACTOR = {
     "a": 3600 * 24 * 365,
 }
 
-CPU_COUNT = os.cpu_count()
-
 help_str_base = (
     "<p><b>Trajectory ID field</b> is the input layer field containing the ID "
     "of the moving objects. If no field is specified, all input features are "
@@ -66,6 +64,7 @@ class TrajectoriesAlgorithm(QgsProcessingAlgorithm):
     TRAJ_ID_FIELD = "TRAJ_ID_FIELD"
     TIMESTAMP_FIELD = "TIME_FIELD"
     ADD_METRICS = "ADD_METRICS"
+    USE_PARALLEL_PROCESSING = "USE_PARALLEL_PROCESSING"
     SPEED_UNIT = "SPEED_UNIT"
     MIN_LENGTH = "MIN_LENGTH"
 
@@ -143,6 +142,11 @@ class TrajectoriesAlgorithm(QgsProcessingAlgorithm):
         ).split("/")
         self.min_length = self.parameterAsDouble(parameters, self.MIN_LENGTH, context)
         self.add_metrics = self.parameterAsBoolean(parameters, self.ADD_METRICS, context)
+        self.use_parallel = self.parameterAsBoolean(parameters, self.USE_PARALLEL_PROCESSING, context)
+        if self.use_parallel:
+            self.cpu_count = os.cpu_count()
+        else: 
+            self.cpu_count = 1
 
     def create_tc(self, parameters, context):
         self.prepare_parameters(parameters, context)
@@ -159,8 +163,8 @@ class TrajectoriesAlgorithm(QgsProcessingAlgorithm):
 
         if self.add_metrics:
             try:
-                tc.add_speed(units=tuple(self.speed_units), overwrite=True, n_processes=CPU_COUNT)
-                tc.add_direction(overwrite=True, n_processes=CPU_COUNT)
+                tc.add_speed(units=tuple(self.speed_units), overwrite=True, n_processes=self.cpu_count)
+                tc.add_direction(overwrite=True, n_processes=self.cpu_count)
             except TypeError:  # None values cause TypeError: cannot pickle 'QVariant' object, see issue #93
                 raise TypeError("TypeError: cannot pickle 'QVariant' object. This error is usually caused by None values in input layer fields. Try to remove None values or run without Add movement metrics.")
 
@@ -226,7 +230,15 @@ class TrajectoryManipulationAlgorithm(TrajectoriesAlgorithm):
                 defaultValue=True,
                 optional=False,
             )
-        )        
+        )   
+        self.addParameter(
+            QgsProcessingParameterBoolean(
+                name=self.USE_PARALLEL_PROCESSING,
+                description=self.tr("Use parallel processing (experimental)"),
+                defaultValue=False,
+                optional=False,
+            )
+        )       
         self.addParameter(
             QgsProcessingParameterString(
                 name=self.SPEED_UNIT,

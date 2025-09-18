@@ -21,9 +21,6 @@ sys.path.append("..")
 from .trajectoriesAlgorithm import TrajectoryManipulationAlgorithm, help_str_base, help_str_traj
 
 
-CPU_COUNT = os.cpu_count()
-
-
 class SplitTrajectoriesAlgorithm(TrajectoryManipulationAlgorithm):
     def __init__(self):
         super().__init__()
@@ -90,12 +87,13 @@ class ObservationGapSplitterAlgorithm(SplitTrajectoriesAlgorithm):
         if td_units == "Weeks": 
             td_units = "W"
         time_gap = pd.Timedelta(f"{time_gap} {td_units}").to_pytimedelta()
+
         for traj in tc.trajectories:
             try: 
                 splits = ObservationGapSplitter(traj).split(
                     gap=time_gap, 
                     min_length=tc.min_length, 
-                    n_processes=CPU_COUNT
+                    n_processes=self.cpu_count
                 )
             except TypeError:
                 raise TypeError("TypeError: cannot pickle 'QVariant' object. This error is usually caused by None values in input layer fields. Try to remove None values or run without Add movement metrics.")
@@ -151,7 +149,7 @@ class TemporalSplitterAlgorithm(SplitTrajectoriesAlgorithm):
             splits = TemporalSplitter(tc).split(
                     mode=split_mode, 
                     min_length=tc.min_length, 
-                    n_processes=CPU_COUNT
+                    n_processes=self.cpu_count
                 )    
         except TypeError:
             raise TypeError("TypeError: cannot pickle 'QVariant' object. This error is usually caused by None values in input layer fields. Try to remove None values or run without Add movement metrics.")
@@ -212,7 +210,7 @@ class StopSplitterAlgorithm(SplitTrajectoriesAlgorithm):
                 max_diameter=max_diameter, 
                 min_duration=min_duration, 
                 min_length=tc.min_length, 
-                n_processes=CPU_COUNT
+                n_processes=self.cpu_count
             )
         except TypeError:
             raise TypeError("TypeError: cannot pickle 'QVariant' object. This error is usually caused by None values in input layer fields. Try to remove None values or run without Add movement metrics.")
@@ -263,7 +261,7 @@ class ValueChangeSplitterAlgorithm(SplitTrajectoriesAlgorithm):
                 splits = ValueChangeSplitter(traj).split(
                     col_name=self.field, 
                     min_length=tc.min_length, 
-                    n_processes=CPU_COUNT
+                    n_processes=self.cpu_count
                 )
             except TypeError:
                 raise TypeError("TypeError: cannot pickle 'QVariant' object. This error is usually caused by None values in input layer fields. Try to remove None values or run without Add movement metrics.")

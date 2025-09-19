@@ -22,7 +22,7 @@ except ImportError as error:
     raise ImportError(
         "Missing dependency. To use the trajectory analysis algorithms "
         "please install MovingPandas. For details see: "
-        "https://github.com/movingpandas/qgis-processing-trajectory."
+        "https://codeberg.org/movingpandas/trajectools."
     ) from error
 
 
@@ -48,9 +48,8 @@ def set_multiprocess_path():
                     multiprocessing.set_executable(python_path)
                 else:
                     qgis_utils.iface.messageBar().pushMessage(
-                        'Semi-Automatic Classification Plugin',
+                        'Trajectools',
                         QApplication.translate(
-                            'semiautomaticclassificationplugin',
                             'Error. Python library not found'
                         ),
                         level=Qgis.Info
@@ -74,9 +73,8 @@ def set_multiprocess_path():
                     multiprocessing.set_executable(python_path)
                 else:
                     qgis_utils.iface.messageBar().pushMessage(
-                        'Semi-Automatic Classification Plugin',
+                        'Trajectools',
                         QApplication.translate(
-                            'semiautomaticclassificationplugin',
                             'Error. Python library not found'
                         ),
                         level=Qgis.Info

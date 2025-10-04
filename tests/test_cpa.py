@@ -13,25 +13,23 @@ import pytest
 
 import movingpandas as mpd
 
-from qgis.core import QgsGeometry, QgsVectorLayer
+from qgis.core import QgsVectorLayer
 
+# Allow the test to find the qgis_processing module
 sys.path.append("..")
 
 from qgis_processing.qgisUtils import tc_from_pt_layer
 from qgis_processing.cpa import CPACalculator
 
 
-CPA_DATA = "./sample_data/ais_dk_cpa.gpkg"
+# Constants
 ID_COL = "traj_id"
 TIME_COL = "t"
 
 @pytest.fixture
 def data_dir():
-    data_dir = pathlib.Path(__file__).parent.parent / 'sample_data'
-    return data_dir
-
-
-
+    """Returns a pathlib.Path object to the sample_data directory."""
+    return pathlib.Path(__file__).parent.parent / 'sample_data'
 
 # Create local 3d engineering coordinate system
 # CPA algorithm works in 2d cartesian or 3d cartesian
@@ -53,9 +51,10 @@ UTC = datetime.timezone.utc
 
 
 @pytest.fixture()
-def vector_layer():
-    vector_layer = QgsVectorLayer(CPA_DATA, "cpa test data")
-    return vector_layer
+def vector_layer(data_dir):
+    """Creates a QgsVectorLayer from the test AIS data."""
+    cpa_data_path = str(data_dir / "ais_dk_cpa.gpkg")
+    return QgsVectorLayer(cpa_data_path, "cpa test data")
 
 @pytest.fixture
 def trajectory_collection(vector_layer):
@@ -68,8 +67,6 @@ def test_vector_layer(vector_layer):
 def test_trajectory_collection(trajectory_collection):
     # trajectory collection should have two trajectories
     assert len(trajectory_collection) == 2
-
-
 
 @pytest.fixture
 def traj_a():
@@ -326,7 +323,7 @@ def test_crossing():
         result.t_at.timestamp(), 6.5, err_msg="t should equal 6.5"
     )
     np.testing.assert_almost_equal(
-        result.dist, 2.121320, decimal=5, err_msg="distance should equal 212"
+        result.dist, 2.121320, decimal=5, err_msg="distance should equal 2.12"
     )
     assert result.status == "approaching", "status should be approaching"
 

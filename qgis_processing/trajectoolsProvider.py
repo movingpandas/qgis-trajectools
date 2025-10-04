@@ -25,7 +25,7 @@ from .extractPtsAlgorithm import (
     ExtractStopsAlgorithm,
 )
 from .cpaAlgorithm import (
-    CPAAlgorithm
+    CpaAlgorithm
 )
 from .generalizationAlgorithm import (
     DouglasPeuckerGeneralizerAlgorithm,
@@ -93,7 +93,7 @@ class TrajectoolsProvider(QgsProcessingProvider):
             ObservationGapSplitterAlgorithm(),
             TemporalSplitterAlgorithm(),
             StopSplitterAlgorithm(),
-            CPAAlgorithm(),
+            CpaAlgorithm(),
             ValueChangeSplitterAlgorithm(),
             ClipTrajectoriesByExtentAlgorithm(),
             ClipTrajectoriesByPolygonLayerAlgorithm(),

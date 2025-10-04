@@ -1,8 +1,8 @@
 import os
 import sys
 
-import shapely.wkt
-from shapely.geometry import Polygon
+import pandas as pd
+from movingpandas import TrajectoryStopDetector
 
 from qgis.PyQt.QtCore import QCoreApplication, QVariant
 from qgis.core import (
@@ -19,17 +19,10 @@ from qgis.core import (
 )
 from qgis.core import QgsMessageLog, Qgis
 
-import pandas as pd
-from geopandas import GeoDataFrame
-from movingpandas import TrajectoryStopDetector
-
 sys.path.append("..")
 
-from .trajectoriesAlgorithm import TrajectoriesAlgorithm
-from .qgisUtils import feature_from_gdf_row, feature_from_df_row
-
-
-CPU_COUNT = os.cpu_count()
+from .trajectoriesAlgorithm import TrajectoriesAlgorithm, help_str_base
+from .qgisUtils import feature_from_gdf_row
 
 
 class ExtractODPtsAlgorithm(TrajectoriesAlgorithm):
@@ -69,7 +62,7 @@ class ExtractODPtsAlgorithm(TrajectoriesAlgorithm):
         return self.tr("Extract OD points")
 
     def shortHelpString(self):
-        return self.tr("<p>Extracts start and/or end points of trajectories.</p>")
+        return self.tr("<p>Extracts start and/or end points of trajectories.</p>"+help_str_base)
 
     def processAlgorithm(self, parameters, context, feedback):
         tc, crs = self.create_tc(parameters, context)
@@ -179,15 +172,15 @@ class ExtractStopsAlgorithm(TrajectoriesAlgorithm):
         return self.tr("Extract stop points")
 
     def shortHelpString(self):
-        return self.tr("<p>Extracts stop points from trajectories.</p>")
+        return self.tr("<p>Extracts stop points from trajectories.</p>"+help_str_base)
 
     def processAlgorithm(self, parameters, context, feedback):
         tc, crs = self.create_tc(parameters, context)
 
         self.fields_pts = QgsFields()
         self.fields_pts.append(QgsField("stop_id", QVariant.String))
-        self.fields_pts.append(QgsField("start_time", QVariant.String))  # .DateTime))
-        self.fields_pts.append(QgsField("end_time", QVariant.String))  # .DateTime))
+        self.fields_pts.append(QgsField("start_time", QVariant.DateTime))
+        self.fields_pts.append(QgsField("end_time", QVariant.DateTime))
         self.fields_pts.append(QgsField("traj_id", QVariant.String))
         self.fields_pts.append(QgsField("duration_s", QVariant.Double))
 
@@ -209,13 +202,15 @@ class ExtractStopsAlgorithm(TrajectoriesAlgorithm):
         min_duration = self.parameterAsString(parameters, self.MIN_DURATION, context)
         min_duration = pd.Timedelta(min_duration).to_pytimedelta()
 
-        gdf = TrajectoryStopDetector(tc, n_processes=CPU_COUNT).get_stop_points(
-            max_diameter=max_diameter, min_duration=min_duration
-        )
+        try: 
+            gdf = TrajectoryStopDetector(tc, n_processes=self.cpu_count).get_stop_points(
+                max_diameter=max_diameter, min_duration=min_duration
+            )
+        except TypeError:
+            raise TypeError("TypeError: cannot pickle 'QVariant' object. This error is usually caused by None values in input layer fields. Try to remove None values or run without Add movement metrics.")
+          
         gdf = gdf.convert_dtypes()
         gdf["stop_id"] = gdf.index.astype(str)
-        gdf["start_time"] = gdf["start_time"].astype(str)
-        gdf["end_time"] = gdf["end_time"].astype(str)
 
         names = [field.name() for field in self.fields_pts]
         names.append("geometry")

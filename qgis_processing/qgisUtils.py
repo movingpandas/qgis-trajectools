@@ -4,6 +4,8 @@ import multiprocessing
 import pandas as pd
 from os import path
 from pyproj import CRS
+from datetime import datetime
+
 from qgis.core import (
     QgsFeature,
     QgsGeometry,
@@ -20,7 +22,7 @@ except ImportError as error:
     raise ImportError(
         "Missing dependency. To use the trajectory analysis algorithms "
         "please install MovingPandas. For details see: "
-        "https://github.com/movingpandas/qgis-processing-trajectory."
+        "https://codeberg.org/movingpandas/trajectools."
     ) from error
 
 
@@ -46,9 +48,8 @@ def set_multiprocess_path():
                     multiprocessing.set_executable(python_path)
                 else:
                     qgis_utils.iface.messageBar().pushMessage(
-                        'Semi-Automatic Classification Plugin',
+                        'Trajectools',
                         QApplication.translate(
-                            'semiautomaticclassificationplugin',
                             'Error. Python library not found'
                         ),
                         level=Qgis.Info
@@ -72,9 +73,8 @@ def set_multiprocess_path():
                     multiprocessing.set_executable(python_path)
                 else:
                     qgis_utils.iface.messageBar().pushMessage(
-                        'Semi-Automatic Classification Plugin',
+                        'Trajectools',
                         QApplication.translate(
-                            'semiautomaticclassificationplugin',
                             'Error. Python library not found'
                         ),
                         level=Qgis.Info
@@ -97,7 +97,7 @@ def df_from_pt_layer(layer, time_field_name, trajectory_id_field):
         my_dict = {}
         for i, a in enumerate(feature.attributes()):
             # QgsMessageLog.logMessage(f"{names[i]} | {time_field_name}", "Trajectools", level=Qgis.Info )
-            if names[i] == time_field_name:  # and type(a) == "QDateTime":
+            if names[i] == time_field_name:  
                 try:
                     a = a.toPyDateTime()
                 except:
@@ -113,11 +113,16 @@ def df_from_pt_layer(layer, time_field_name, trajectory_id_field):
 
 def tc_from_pt_layer(layer, time_field_name, trajectory_id_field, min_length=0):
     df = df_from_pt_layer(layer, time_field_name, trajectory_id_field)
-    crs = CRS(int(layer.sourceCrs().geographicCrsAuthId().split(":")[1]))
+    crs = CRS(int(layer.sourceCrs().authid().split(":")[1]))
     return tc_from_df(df, time_field_name, trajectory_id_field, crs, min_length)
 
 
 def tc_from_df(df, time_field_name, trajectory_id_field, crs, min_length=0):
+    df.drop(columns=['geometry'], inplace=True, errors='ignore'),  # Fixes Error when attribute table contains geometry column #44
+
+    if trajectory_id_field == "trajectory_id" and "trajectory_id" not in df.columns:
+        df["trajectory_id"] = 1
+
     tc = TrajectoryCollection(
         df,
         traj_id_col=trajectory_id_field,
@@ -134,6 +139,9 @@ def feature_from_gdf_row(row):
     f = QgsFeature()
     f.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(row.geometry.x, row.geometry.y)))
     values = row.values.tolist()[:-1]
+    for i, value in enumerate(values):
+        if isinstance(value, datetime):
+            values[i] = QDateTime(value)
     # for v in values:
     #    QgsMessageLog.logMessage(str(type(v)), "Trajectools", level=Qgis.Info )
     f.setAttributes(values)

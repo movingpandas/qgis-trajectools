@@ -1,7 +1,7 @@
 import os
 import sys
 
-from qgis.PyQt.QtCore import QCoreApplication, QVariant
+from qgis.PyQt.QtCore import QCoreApplication, QVariant, QDateTime
 from qgis.PyQt.QtGui import QIcon
 from qgis.core import (
     QgsProcessing,
@@ -27,7 +27,6 @@ from .qgisUtils import (
     set_multiprocess_path,
     tc_from_pt_layer, 
     feature_from_gdf_row, 
-    feature_from_df_row, 
     df_from_pt_layer, 
 )
 
@@ -41,14 +40,31 @@ TIME_FACTOR = {
     "a": 3600 * 24 * 365,
 }
 
-CPU_COUNT = os.cpu_count()
-
+help_str_base = (
+    "<p><b>Trajectory ID field</b> is the input layer field containing the ID "
+    "of the moving objects. If no field is specified, all input features are "
+    "assigned to a single moving object. </p>"
+    "<p><b>Timestamp field</b> is the input layer field the position time. "
+    "Datetime fields are preferred but we will attempt to parse string fields "
+    "using Pandas' built-in parser.</p>")
+help_str_traj = (
+    "<p><b>Minimum trajectory length</b> is the desired minimum length of output "
+    "trajectories, calculated using CRS units, except if the CRS is geographic "
+    "(e.g. EPSG:4326 WGS84) then length is calculated in meters. "
+    "(Shorter trajectories are discarded.)</p>"      
+    "<p><b>Speed</b> is calculated based on the input layer CRS information and "
+    "converted to the desired speed units. For more info on the supported units, "
+    "see https://movingpandas.org/units.</p>"
+    "<p><b>Direction</b> is calculated between consecutive locations. Direction "
+    "values are in degrees, starting North turning clockwise.</p>"
+)
 
 class TrajectoriesAlgorithm(QgsProcessingAlgorithm):
     INPUT = "INPUT"
     TRAJ_ID_FIELD = "TRAJ_ID_FIELD"
     TIMESTAMP_FIELD = "TIME_FIELD"
     ADD_METRICS = "ADD_METRICS"
+    USE_PARALLEL_PROCESSING = "USE_PARALLEL_PROCESSING"
     SPEED_UNIT = "SPEED_UNIT"
     MIN_LENGTH = "MIN_LENGTH"
 
@@ -88,7 +104,7 @@ class TrajectoriesAlgorithm(QgsProcessingAlgorithm):
                 parentLayerParameterName=self.INPUT,
                 type=QgsProcessingParameterField.Any,
                 allowMultiple=False,
-                optional=False,
+                optional=True,
             )
         )
         self.addParameter(
@@ -126,6 +142,11 @@ class TrajectoriesAlgorithm(QgsProcessingAlgorithm):
         ).split("/")
         self.min_length = self.parameterAsDouble(parameters, self.MIN_LENGTH, context)
         self.add_metrics = self.parameterAsBoolean(parameters, self.ADD_METRICS, context)
+        self.use_parallel = self.parameterAsBoolean(parameters, self.USE_PARALLEL_PROCESSING, context)
+        if self.use_parallel:
+            self.cpu_count = os.cpu_count()
+        else: 
+            self.cpu_count = 1
 
     def create_tc(self, parameters, context):
         self.prepare_parameters(parameters, context)
@@ -141,8 +162,12 @@ class TrajectoriesAlgorithm(QgsProcessingAlgorithm):
             )
 
         if self.add_metrics:
-            tc.add_speed(units=tuple(self.speed_units), overwrite=True, n_processes=CPU_COUNT)
-            tc.add_direction(overwrite=True, n_processes=CPU_COUNT)
+            try:
+                tc.add_speed(units=tuple(self.speed_units), overwrite=True, n_processes=self.cpu_count)
+                tc.add_direction(overwrite=True, n_processes=self.cpu_count)
+            except TypeError:  # None values cause TypeError: cannot pickle 'QVariant' object, see issue #93
+                raise TypeError("TypeError: cannot pickle 'QVariant' object. This error is usually caused by None values in input layer fields. Try to remove None values or run without Add movement metrics.")
+
         return tc, crs
 
     def get_pt_fields(self, fields_to_add=[]):
@@ -150,9 +175,13 @@ class TrajectoriesAlgorithm(QgsProcessingAlgorithm):
         for field in self.input_layer.fields():
             if field.name() == "fid":
                 continue
+            elif field.name() == "geometry":
+                continue  # Fixes Error when attribute table contains geometry column #44
             elif field.name() == self.traj_id_field:
                 # we need to make sure the ID field is String
                 fields.append(QgsField(self.traj_id_field, QVariant.String))
+            elif field.name() == self.timestamp_field:
+                fields.append(QgsField(self.timestamp_field, QVariant.DateTime))
             else:
                 fields.append(field)
         for field in fields_to_add:
@@ -201,7 +230,15 @@ class TrajectoryManipulationAlgorithm(TrajectoriesAlgorithm):
                 defaultValue=True,
                 optional=False,
             )
-        )        
+        )   
+        self.addParameter(
+            QgsProcessingParameterBoolean(
+                name=self.USE_PARALLEL_PROCESSING,
+                description=self.tr("Use parallel processing (experimental)"),
+                defaultValue=False,
+                optional=False,
+            )
+        )       
         self.addParameter(
             QgsProcessingParameterString(
                 name=self.SPEED_UNIT,
@@ -274,8 +311,8 @@ class TrajectoryManipulationAlgorithm(TrajectoriesAlgorithm):
         speed_units = f"{self.speed_units[0]}{self.speed_units[1]}"
         fields = QgsFields()
         fields.append(QgsField(self.traj_id_field, QVariant.String))
-        fields.append(QgsField("start_time", QVariant.String))
-        fields.append(QgsField("end_time", QVariant.String))
+        fields.append(QgsField("start_time", QVariant.DateTime))
+        fields.append(QgsField("end_time", QVariant.DateTime))
         fields.append(QgsField("duration_seconds", QVariant.Double))
         fields.append(QgsField(f"length_{length_units}", QVariant.Double))
         fields.append(QgsField(f"speed_{speed_units}", QVariant.Double))
@@ -292,8 +329,8 @@ class TrajectoryManipulationAlgorithm(TrajectoriesAlgorithm):
         line = QgsGeometry.fromWkt(traj.to_linestringm_wkt())
         f = QgsFeature()
         f.setGeometry(line)
-        start_time = traj.get_start_time().isoformat()
-        end_time = traj.get_end_time().isoformat()
+        start_time = QDateTime(traj.get_start_time())
+        end_time = QDateTime(traj.get_end_time())
         duration = float(traj.get_duration().total_seconds())
         length = traj.get_length(units=self.speed_units[0])
         speed = length / (duration / TIME_FACTOR[self.speed_units[1]])
@@ -321,7 +358,8 @@ class TrajectoryManipulationAlgorithm(TrajectoriesAlgorithm):
             dfs = tc.to_point_gdf()
         except ValueError:  # when the tc is empty
             return
-        dfs[self.timestamp_field] = dfs.index.astype(str)
+        dfs[self.timestamp_field] = dfs.index
+
         names = [field.name() for field in self.fields_pts]
         for field_name in field_names_to_add:
             names.append(field_name)      

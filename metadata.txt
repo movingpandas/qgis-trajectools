@@ -3,7 +3,7 @@ name=Trajectools
 description=Processing tools for handling trajectory data 
 about=Trajectools adds trajectory analysis algorithms to the QGIS Processing toolbox. Trajectools requires MovingPandas >= 0.22.3 and optionally integrates scikit-mobility (for privacy tests), stonesoup (for smoothing), and gtfs_functions (for GTFS data support). See the plugin homepage for installation recommendations. Sample data for testing the functionality is provided with the plugin download. 
 category=Plugins
-version=2.6.1
+version=2.7.1
 qgisMinimumVersion=3.0
 qgisMaximumVersion=4.0
 
@@ -20,7 +20,18 @@ repository=https://codeberg.org/movingpandas/trajectools
 experimental=False
 deprecated=False
 
-changelog=2.6.1
+changelog=2.7.1
+    - Get correct CRS authid, fixes #97
+    - Make parallel processing optional, avoids #93
+    2.7
+    - Added proper datetime fields in output layers (instead of previous string type fields)
+    - Made trajectory ID field optional (for input layers with only a single moving object), fixes #37
+    - Improved help texts explaining trajectory ID and timestamp fields, fixes #35
+    - Drop potential extraneous geometry columns from attribute table, fixes #44
+    - Show better error message when NULL values cause parallel processing error, see #93
+    2.6.2
+    - Create proper datetime fields
+    2.6.1
     - Added minimum MovingPandas version warning
     2.6
     - Set minimum MovingPandas version to 0.22.3

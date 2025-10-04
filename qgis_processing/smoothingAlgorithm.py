@@ -13,7 +13,7 @@ from qgis.core import (
 
 sys.path.append("..")
 
-from .trajectoriesAlgorithm import TrajectoryManipulationAlgorithm
+from .trajectoriesAlgorithm import TrajectoryManipulationAlgorithm, help_str_base, help_str_traj
 
 
 class SmoothingAlgorithm(TrajectoryManipulationAlgorithm):
@@ -70,15 +70,7 @@ class KalmanSmootherAlgorithm(SmoothingAlgorithm):
             "<p>Higher <b>Measurement noise</b> values lead to smoother trajectories.</p>"
             "<p>For more info see: "
             "https://movingpandas.readthedocs.io/en/main/api/trajectorysmoother.html</p>"
-            "<p><b>Speed</b> is calculated based on the input layer CRS information and "
-            "converted to the desired speed units. For more info on the supported units, "
-            "see https://movingpandas.org/units</p>"
-            "<p><b>Direction</b> is calculated between consecutive locations. Direction "
-            "values are in degrees, starting North turning clockwise.</p>"
-            "<p><b>Minimum trajectory length</b> is the desired minimum length of output "
-            "trajectories, calculated using CRS units, except if the CRS is geographic "
-            "(e.g. EPSG:4326 WGS84) then length is calculated in meters. "
-            "(Shorter trajectories are discarded.)</p>"  
+            ""+help_str_base+help_str_traj
         )
 
     def processTc(self, tc, parameters, context):

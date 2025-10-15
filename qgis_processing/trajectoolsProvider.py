@@ -36,8 +36,8 @@ from .cleaningAlgorithm import (
 
 try:  # skmob-based algs
     from .privacyAttackAlgorithm import HomeWorkAttack
-except ImportError:
-    pass
+except ImportError as e:
+    QgsMessageLog.logMessage(e.msg, "Trajectools", level=Qgis.Info)
 
 try:  # gtfs_functions-based algs
     from .gtfsAlgorithm import (
@@ -45,13 +45,13 @@ try:  # gtfs_functions-based algs
         GtfsShapesAlgorithm, 
         GtfsSegmentsAlgorithm
     )
-except ImportError:
-    pass
+except ImportError as e:
+    QgsMessageLog.logMessage(e.msg, "Trajectools", level=Qgis.Info)
 
 try:  # stonesoup-based algs
     from .smoothingAlgorithm import KalmanSmootherAlgorithm
-except ImportError:
-    pass
+except ImportError as e:
+    QgsMessageLog.logMessage(e.msg, "Trajectools", level=Qgis.Info)
 
 
 pluginPath = os.path.dirname(__file__)

@@ -23,13 +23,13 @@ Trajectools requires [MovingPandas](https://github.com/movingpandas/movingpandas
 The recommended way to install these dependencies is through conda/mamba:
 
 ```
-(base) conda create -n qgis -c conda-forge python=3.11 
+(base) conda create -n qgis -c conda-forge python=3.12 
 (base) conda activate qgis
 (qgis) mamba install -c conda-forge qgis movingpandas scikit-mobility stonesoup
 (qgis) pip install gtfs_functions==2.5 h3==3.7.7
 ```
 
-(More details: https://anitagraser.com/2023/01/21/pyqgis-jupyter-notebooks-on-windows-using-conda/)
+Note: Do not upgrade to Python 3.13 if you want to use the GTFS functions. (See https://codeberg.org/movingpandas/trajectools/issues/103 for details.)
 
 ### Pip install
 

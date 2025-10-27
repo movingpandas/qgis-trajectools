@@ -13,6 +13,7 @@ from qgis.core import (
     QgsFeatureSink,
     QgsMessageLog,
     Qgis,
+    NULL,
 )
 from qgis.PyQt.QtCore import QDateTime
 
@@ -91,23 +92,26 @@ def trajectories_from_qgis_point_layer(
 
 
 def df_from_pt_layer(layer, time_field_name, trajectory_id_field):
+    def to_date(qdatetime):
+        if qdatetime == NULL: 
+            return None
+        return qdatetime.toPyDateTime()
+
     names = [field.name() for field in layer.fields()]
     data = []
     for feature in layer.getFeatures():
         my_dict = {}
         for i, a in enumerate(feature.attributes()):
             # QgsMessageLog.logMessage(f"{names[i]} | {time_field_name}", "Trajectools", level=Qgis.Info )
-            if names[i] == time_field_name:  
-                try:
-                    a = a.toPyDateTime()
-                except:
-                    pass
+            if a == NULL:
+                a = None 
             my_dict[names[i]] = a
         pt = feature.geometry().asPoint()
         my_dict["geom_x"] = pt.x()
         my_dict["geom_y"] = pt.y()
         data.append(my_dict)
     df = pd.DataFrame(data)
+    df[time_field_name] = df[time_field_name].apply(lambda a: to_date(a))
     return df
 
 

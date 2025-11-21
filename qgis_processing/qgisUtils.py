@@ -92,10 +92,13 @@ def trajectories_from_qgis_point_layer(
 
 
 def df_from_pt_layer(layer, time_field_name, trajectory_id_field):
-    def to_date(qdatetime):
-        if qdatetime == NULL: 
+    def to_date(dt):
+        if dt == NULL: 
             return None
-        return qdatetime.toPyDateTime()
+        if isinstance(dt, QDateTime):
+            return dt.toPyDateTime()
+        else:
+            return pd.to_datetime(dt)
 
     names = [field.name() for field in layer.fields()]
     data = []

@@ -159,8 +159,8 @@ class TrajectoriesAlgorithm(QgsProcessingAlgorithm):
         )
 
         if len(tc.trajectories) < 1:
-            raise ValueError(  # noqa E501
-                "The resulting trajectory collection is empty. Check that the trajectory ID and timestamp fields have been configured correctly."
+            raise ValueError(
+                "The resulting trajectory collection is empty. Check that the trajectory ID and timestamp fields have been configured correctly."  # noqa E501
             )
 
         if self.add_metrics:
@@ -171,11 +171,11 @@ class TrajectoriesAlgorithm(QgsProcessingAlgorithm):
                     n_processes=self.cpu_count,
                 )
                 tc.add_direction(overwrite=True, n_processes=self.cpu_count)
-            except (  # noqa E501
-                TypeError  # None values cause TypeError: cannot pickle 'QVariant' object, see issue #93
+            except (
+                TypeError  # None values cause TypeError: cannot pickle 'QVariant' object, see issue #93   # noqa E501
             ):  
-                raise TypeError(  # noqa E501
-                    "TypeError: cannot pickle 'QVariant' object. This error is usually caused by None values in input layer fields. Try to remove None values or run without Add movement metrics."
+                raise TypeError(
+                    "TypeError: cannot pickle 'QVariant' object. This error is usually caused by None values in input layer fields. Try to remove None values or run without Add movement metrics."  # noqa E501
                 )
 
         return tc, crs

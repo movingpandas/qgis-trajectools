@@ -57,16 +57,17 @@ class KalmanSmootherAlgorithm(SmoothingAlgorithm):
         return self.tr("Kalman filter with constant velocity model")
 
     def shortHelpString(self):
-        return self.tr(  # noqa E501
-            "<p>Smooths trajectories using a Kalman Filter with a Constant Velocity model. "
+        return self.tr(
+            "<p>Smooths trajectories using a Kalman Filter with a Constant Velocity " 
+            "model. "
             "The Constant Velocity model assumes that the speed between consecutive "
-            "locations is nearly constant. For trajectories where traj.is_latlon = True "
-            "the smoother converts to EPSG:3395 (World Mercator) internally to perform "
-            "filtering and smoothing. "
-            "<p>Higher <b>Process noise</b> values lead to less-smooth trajectories.</p>"
-            "<p>Higher <b>Measurement noise</b> values lead to smoother trajectories.</p>"
+            "locations is nearly constant. For trajectories where traj.is_latlon = " 
+            "True the smoother converts to EPSG:3395 (World Mercator) internally to " 
+            "perform filtering and smoothing. "
+            "<p>Higher <b>Process noise</b> values lead to less-smooth trajectories.</p>"  # noqa E501
+            "<p>Higher <b>Measurement noise</b> values lead to smoother trajectories.</p>"  # noqa E501
             "<p>For more info see: "
-            "https://movingpandas.readthedocs.io/en/main/api/trajectorysmoother.html</p>"
+            "https://movingpandas.readthedocs.io/en/main/api/trajectorysmoother.html</p>"  # noqa E501
             "" + help_str_base + help_str_traj
         )
 

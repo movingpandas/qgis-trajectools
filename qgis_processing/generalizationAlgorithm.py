@@ -55,11 +55,11 @@ class DouglasPeuckerGeneralizerAlgorithm(GeneralizeTrajectoriesAlgorithm):
         return self.tr("Douglas-Peucker generalization")
 
     def shortHelpString(self):
-        return self.tr(  # noqa E501
+        return self.tr(
             "<p>Generalizes trajectories using Douglas-Peucker algorithm "
             "(as implemented in shapely/Geos). </p>"
             "<p>For more info see: "
-            "https://movingpandas.readthedocs.io/en/main/api/trajectorygeneralizer.html</p>"
+            "https://movingpandas.readthedocs.io/en/main/api/trajectorygeneralizer.html</p>"  # noqa E501
             "" + help_str_base + help_str_traj
         )
 
@@ -93,13 +93,13 @@ class MinDistanceGeneralizerAlgorithm(GeneralizeTrajectoriesAlgorithm):
         return self.tr("Distance-based generalization")
 
     def shortHelpString(self):
-        return self.tr(  # noqa E501
+        return self.tr(
             "This generalization ensures that consecutive locations are at least a "
             "certain distance apart. "
             "Distance is calculated using CRS units, except if the CRS is geographic "
             "(e.g. EPSG:4326 WGS84) then distance is calculated in metres. </p>"
             "<p>For more info see: "
-            "https://movingpandas.readthedocs.io/en/main/api/trajectorygeneralizer.html</p>"
+            "https://movingpandas.readthedocs.io/en/main/api/trajectorygeneralizer.html</p>"  # noqa E501
             "" + help_str_base + help_str_traj
         )
 
@@ -135,11 +135,11 @@ class MinTimeDeltaGeneralizerAlgorithm(GeneralizeTrajectoriesAlgorithm):
         return self.tr("Temporal generalization")
 
     def shortHelpString(self):
-        return self.tr(  # noqa E501
+        return self.tr(
             "This generalization ensures that consecutive rows are at least a certain "
             "timedelta apart. </p>"
             "<p>For more info see: "
-            "https://movingpandas.readthedocs.io/en/main/api/trajectorygeneralizer.html</p>"
+            "https://movingpandas.readthedocs.io/en/main/api/trajectorygeneralizer.html</p>"  # noqa E501
             "" + help_str_base + help_str_traj
         )
 
@@ -174,17 +174,17 @@ class TopDownTimeRatioGeneralizerAlgorithm(GeneralizeTrajectoriesAlgorithm):
         return self.tr("Spatiotemporal generalization (TDTR)")
 
     def shortHelpString(self):
-        return self.tr(  # noqa E501
+        return self.tr(
             "Generalizes using Top-Down Time Ratio algorithm proposed by "
             "Meratnia & de By (2004). "
             "This is a spatiotemporal trajectory generalization algorithm. "
             "Where Douglas-Peucker simply measures the spatial distance between points "
-            "and original line geometry, Top-Down Time Ratio (TDTR) measures the distance "
-            "between points and their spatiotemporal projection on the trajectory. "
-            "These projections are calculated based on the ratio of travel times between "
-            "the segment start and end times and the point time. </p>"
+            "and original line geometry, Top-Down Time Ratio (TDTR) measures the "
+            "distance between points and their spatiotemporal projection on the "
+            "trajectory. These projections are calculated based on the ratio of travel "
+            "times between the segment start and end times and the point time. </p>"
             "<p>For more info see: "
-            "https://movingpandas.readthedocs.io/en/main/api/trajectorygeneralizer.html</p>"
+            "https://movingpandas.readthedocs.io/en/main/api/trajectorygeneralizer.html</p>"  # noqa E501
             "" + help_str_base + help_str_traj
         )
 

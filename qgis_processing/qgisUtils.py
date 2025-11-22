@@ -44,9 +44,9 @@ def set_multiprocess_path():
                 if path.isfile(python_path):
                     multiprocessing.set_executable(python_path)
                 else:
-                    qgis_utils.iface.messageBar().pushMessage(  # noqa E501
+                    qgis_utils.iface.messageBar().pushMessage(  # noqa F821
                         "Trajectools",
-                        QApplication.translate("Error. Python library not found"),  # noqa E501
+                        QApplication.translate("Error. Python library not found"),  # noqa F821
                         level=Qgis.Info,
                     )
         except Exception as err:
@@ -93,7 +93,6 @@ def df_from_pt_layer(layer, time_field_name, trajectory_id_field):
     for feature in layer.getFeatures():
         my_dict = {}
         for i, a in enumerate(feature.attributes()):
-            # QgsMessageLog.logMessage(f"{names[i]} | {time_field_name}", "Trajectools", level=Qgis.Info )
             if a == NULL:
                 a = None
             my_dict[names[i]] = a
@@ -149,7 +148,7 @@ def feature_from_df_row(row):
     f = QgsFeature()
     try:
         f.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(row["geom_x"], row["geom_y"])))
-    except:
+    except KeyError:
         raise (KeyError(str(row)))
     values = row.values.tolist()[:-1]
     f.setAttributes(values)

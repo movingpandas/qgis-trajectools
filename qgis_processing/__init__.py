@@ -1,2 +1,1 @@
-name = "trajectools"
-__version__ = "2.7.2"
+__name__ = "qgis_processing"

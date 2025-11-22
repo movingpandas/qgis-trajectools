@@ -72,7 +72,7 @@ class ObservationGapSplitterAlgorithm(SplitTrajectoriesAlgorithm):
         return self.tr("Split trajectories at observation gaps")
 
     def shortHelpString(self):
-        return self.tr(
+        return self.tr(  # noqa E501
             "<p>Splits trajectories into subtrajectories "
             "whenever there is a gap in the observations</p>"
             "<p>For more information on trajectory splitters see: "
@@ -94,7 +94,7 @@ class ObservationGapSplitterAlgorithm(SplitTrajectoriesAlgorithm):
                     gap=time_gap, min_length=tc.min_length, n_processes=self.cpu_count
                 )
             except TypeError:
-                raise TypeError(
+                raise TypeError(  # noqa E501
                     "TypeError: cannot pickle 'QVariant' object. This error is usually caused by None values in input layer fields. Try to remove None values or run without Add movement metrics."
                 )
 
@@ -150,7 +150,7 @@ class TemporalSplitterAlgorithm(SplitTrajectoriesAlgorithm):
                 mode=split_mode, min_length=tc.min_length, n_processes=self.cpu_count
             )
         except TypeError:
-            raise TypeError(
+            raise TypeError(  # noqa E501
                 "TypeError: cannot pickle 'QVariant' object. This error is usually caused by None values in input layer fields. Try to remove None values or run without Add movement metrics."
             )
         self.tc_to_sink(splits)
@@ -213,7 +213,7 @@ class StopSplitterAlgorithm(SplitTrajectoriesAlgorithm):
                 n_processes=self.cpu_count,
             )
         except TypeError:
-            raise TypeError(
+            raise TypeError(  # noqa E501
                 "TypeError: cannot pickle 'QVariant' object. This error is usually caused by None values in input layer fields. Try to remove None values or run without Add movement metrics."
             )
 
@@ -248,7 +248,7 @@ class ValueChangeSplitterAlgorithm(SplitTrajectoriesAlgorithm):
         return self.tr("Split trajectories at field value change")
 
     def shortHelpString(self):
-        return self.tr(
+        return self.tr(  # noqa E501
             "<p>Splits trajectories into subtrajectories "
             "whenever there is a change in the specified field's value.</p>"
             "<p>For more information on trajectory splitters see: "
@@ -266,7 +266,7 @@ class ValueChangeSplitterAlgorithm(SplitTrajectoriesAlgorithm):
                     n_processes=self.cpu_count,
                 )
             except TypeError:
-                raise TypeError(
+                raise TypeError(  # noqa E501
                     "TypeError: cannot pickle 'QVariant' object. This error is usually caused by None values in input layer fields. Try to remove None values or run without Add movement metrics."
                 )
 

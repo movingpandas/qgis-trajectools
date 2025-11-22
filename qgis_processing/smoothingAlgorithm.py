@@ -57,7 +57,7 @@ class KalmanSmootherAlgorithm(SmoothingAlgorithm):
         return self.tr("Kalman filter with constant velocity model")
 
     def shortHelpString(self):
-        return self.tr(
+        return self.tr(  # noqa E501
             "<p>Smooths trajectories using a Kalman Filter with a Constant Velocity model. "
             "The Constant Velocity model assumes that the speed between consecutive "
             "locations is nearly constant. For trajectories where traj.is_latlon = True "

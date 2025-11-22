@@ -47,7 +47,7 @@ class OutlierCleanerAlgorithm(CleaningAlgorithm):
         return self.tr("Remove speed above threshold")
 
     def shortHelpString(self):
-        return self.tr(
+        return self.tr(  # noqa E501
             "<p>Speed-based outlier cleaner that cuts away spikes in the trajectory when "
             "the speed exceeds the provided <b>Speed threshold</b> value </p>"
             "<p>For more info see: "

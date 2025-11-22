@@ -53,7 +53,7 @@ class HomeWorkAttack(TrajectoryManipulationAlgorithm):
         )
 
     def helpUrl(self):
-        return "https://scikit-mobility.github.io/scikit-mobility/reference/privacy.html#skmob.privacy.attacks.HomeWorkAttack"
+        return "https://scikit-mobility.github.io/scikit-mobility/reference/privacy.html#skmob.privacy.attacks.HomeWorkAttack"  # noqa E501
 
     def createInstance(self):
         return type(self)()

@@ -88,7 +88,7 @@ class ClipTrajectoriesByPolygonLayerAlgorithm(OverlayTrajectoriesAlgorithm):
         return self.tr("Clip trajectories by polygon layer")
 
     def shortHelpString(self):
-        return self.tr(
+        return self.tr(  # noqa E501
             "<p>Creates a trajectory point layers with speed and direction information "
             "as well as a trajectory line layer clipped by the specified vector layer.</p>"
             "" + help_str_base + help_str_traj
@@ -140,7 +140,7 @@ class IntersectWithPolygonLayerAlgorithm(OverlayTrajectoriesAlgorithm):
         return self.tr("Intersect trajectories with polygon layer")
 
     def shortHelpString(self):
-        return self.tr(
+        return self.tr(  # noqa E501
             "<p>Creates a trajectory point layers with speed and direction information "
             "as well as a trajectory line layer which ihntersects the specified vector layer.</p>"
             "" + help_str_base + help_str_traj

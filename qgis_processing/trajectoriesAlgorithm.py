@@ -159,7 +159,7 @@ class TrajectoriesAlgorithm(QgsProcessingAlgorithm):
         )
 
         if len(tc.trajectories) < 1:
-            raise ValueError(
+            raise ValueError(  # noqa E501
                 "The resulting trajectory collection is empty. Check that the trajectory ID and timestamp fields have been configured correctly."
             )
 
@@ -171,10 +171,10 @@ class TrajectoriesAlgorithm(QgsProcessingAlgorithm):
                     n_processes=self.cpu_count,
                 )
                 tc.add_direction(overwrite=True, n_processes=self.cpu_count)
-            except (
-                TypeError
-            ):  # None values cause TypeError: cannot pickle 'QVariant' object, see issue #93
-                raise TypeError(
+            except (  # noqa E501
+                TypeError  # None values cause TypeError: cannot pickle 'QVariant' object, see issue #93
+            ):  
+                raise TypeError(  # noqa E501
                     "TypeError: cannot pickle 'QVariant' object. This error is usually caused by None values in input layer fields. Try to remove None values or run without Add movement metrics."
                 )
 
@@ -186,7 +186,7 @@ class TrajectoriesAlgorithm(QgsProcessingAlgorithm):
             if field.name() == "fid":
                 continue
             elif field.name() == "geometry":
-                continue  # Fixes Error when attribute table contains geometry column #44
+                continue  # Fixes Error when attribute table contains geometry column #44  # noqa E501
             elif field.name() == self.traj_id_field:
                 # we need to make sure the ID field is String
                 fields.append(QgsField(self.traj_id_field, QVariant.String))
@@ -352,12 +352,12 @@ class TrajectoryManipulationAlgorithm(TrajectoriesAlgorithm):
             try:
                 attrs.append(float(traj.df[a].iloc[0]))
                 continue
-            except:
+            except TypeError:
                 pass
             try:
                 attrs.append(int(traj.df[a].iloc[0]))
                 continue
-            except:
+            except TypeError:
                 pass
             attrs.append(traj.df[a].iloc[0])
         f.setAttributes(attrs)

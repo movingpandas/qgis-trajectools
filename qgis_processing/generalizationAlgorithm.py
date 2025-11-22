@@ -13,8 +13,6 @@ from qgis.core import (
     QgsProcessingParameterNumber,
 )
 
-sys.path.append("..")
-
 from qgis_processing.trajectoriesAlgorithm import (
     TrajectoryManipulationAlgorithm,
     help_str_base,
@@ -57,7 +55,7 @@ class DouglasPeuckerGeneralizerAlgorithm(GeneralizeTrajectoriesAlgorithm):
         return self.tr("Douglas-Peucker generalization")
 
     def shortHelpString(self):
-        return self.tr(
+        return self.tr(  # noqa E501
             "<p>Generalizes trajectories using Douglas-Peucker algorithm "
             "(as implemented in shapely/Geos). </p>"
             "<p>For more info see: "
@@ -95,7 +93,7 @@ class MinDistanceGeneralizerAlgorithm(GeneralizeTrajectoriesAlgorithm):
         return self.tr("Distance-based generalization")
 
     def shortHelpString(self):
-        return self.tr(
+        return self.tr(  # noqa E501
             "This generalization ensures that consecutive locations are at least a "
             "certain distance apart. "
             "Distance is calculated using CRS units, except if the CRS is geographic "
@@ -137,7 +135,7 @@ class MinTimeDeltaGeneralizerAlgorithm(GeneralizeTrajectoriesAlgorithm):
         return self.tr("Temporal generalization")
 
     def shortHelpString(self):
-        return self.tr(
+        return self.tr(  # noqa E501
             "This generalization ensures that consecutive rows are at least a certain "
             "timedelta apart. </p>"
             "<p>For more info see: "
@@ -176,7 +174,7 @@ class TopDownTimeRatioGeneralizerAlgorithm(GeneralizeTrajectoriesAlgorithm):
         return self.tr("Spatiotemporal generalization (TDTR)")
 
     def shortHelpString(self):
-        return self.tr(
+        return self.tr(  # noqa E501
             "Generalizes using Top-Down Time Ratio algorithm proposed by "
             "Meratnia & de By (2004). "
             "This is a spatiotemporal trajectory generalization algorithm. "

@@ -20,11 +20,7 @@
 __author__ = "Anita Graser"
 __date__ = "Sep 2025"
 __copyright__ = "(c) 2025, Anita Graser"
-
-# This will get replaced with a git SHA1 when you do a git archive
-
-__revision__ = "$Format:%H$"
-
+__name__ = "trajectools"
 
 from packaging.version import Version
 from movingpandas import __version__ as mpd_version

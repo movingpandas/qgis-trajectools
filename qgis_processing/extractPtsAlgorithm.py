@@ -201,7 +201,7 @@ class ExtractStopsAlgorithm(TrajectoriesAlgorithm):
                 tc, n_processes=self.cpu_count
             ).get_stop_points(max_diameter=max_diameter, min_duration=min_duration)
         except TypeError:
-            raise TypeError(
+            raise TypeError(  # noqa E501
                 "TypeError: cannot pickle 'QVariant' object. This error is usually caused by None values in input layer fields. Try to remove None values or run without Add movement metrics."
             )
 

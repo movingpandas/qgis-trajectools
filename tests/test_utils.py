@@ -6,6 +6,7 @@ TESTDATA = "./sample_data/geolife.gpkg"
 ID_COL = "trajectory_id"
 TIME_COL_STR = "t"
 TIME_COL_DT = "dt"
+TIME_COL_DT_WITH_NONE = "dt2"
 TIME_FORMAT = "%Y-%m-%d %H:%M:%S+00"
 
 
@@ -29,4 +30,10 @@ def test_tc_from_pt_layer_with_string_timestamp():
 def test_tc_from_pt_layer_with_proper_datetime():
     vl = QgsVectorLayer(TESTDATA, "test data")
     tc = tc_from_pt_layer(vl, TIME_COL_DT, ID_COL)
+    assert len(tc) == 5
+
+
+def test_tc_from_pt_layer_with_none_values():
+    vl = QgsVectorLayer(TESTDATA, "test data")
+    tc = tc_from_pt_layer(vl, TIME_COL_DT_WITH_NONE, ID_COL)
     assert len(tc) == 5

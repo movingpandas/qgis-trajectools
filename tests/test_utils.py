@@ -1,8 +1,4 @@
-import sys
 from qgis.core import QgsGeometry, QgsVectorLayer
-
-sys.path.append("..")
-
 from qgis_processing.qgisUtils import tc_from_pt_layer
 
 

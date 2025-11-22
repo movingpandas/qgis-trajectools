@@ -10,8 +10,6 @@ from qgis.core import (
     QgsFeature,
     QgsGeometry,
     QgsPointXY,
-    QgsFeatureSink,
-    QgsMessageLog,
     Qgis,
     NULL,
 )

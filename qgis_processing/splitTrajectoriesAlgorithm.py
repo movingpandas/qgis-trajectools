@@ -1,5 +1,3 @@
-import os
-import sys
 import pandas as pd
 
 from movingpandas import (
@@ -16,9 +14,7 @@ from qgis.core import (
     QgsProcessingParameterField,
 )
 
-sys.path.append("..")
-
-from .trajectoriesAlgorithm import (
+from qgis_processing.trajectoriesAlgorithm import (
     TrajectoryManipulationAlgorithm,
     help_str_base,
     help_str_traj,

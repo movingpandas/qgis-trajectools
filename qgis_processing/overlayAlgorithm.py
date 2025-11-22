@@ -1,7 +1,4 @@
-import sys
-
 import shapely.wkt
-from shapely.geometry import Polygon
 
 from qgis.PyQt.QtCore import QVariant
 from qgis.core import (
@@ -11,9 +8,7 @@ from qgis.core import (
     QgsField,
 )
 
-sys.path.append("..")
-
-from .trajectoriesAlgorithm import (
+from qgis_processing.trajectoriesAlgorithm import (
     TrajectoryManipulationAlgorithm,
     help_str_base,
     help_str_traj,

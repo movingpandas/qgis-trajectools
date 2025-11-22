@@ -1,5 +1,4 @@
 import os
-import sys
 
 from qgis.PyQt.QtCore import QCoreApplication, QVariant, QDateTime
 from qgis.PyQt.QtGui import QIcon
@@ -21,9 +20,7 @@ from qgis.core import (
     QgsFeatureSink,
 )
 
-sys.path.append("..")
-
-from .qgisUtils import (
+from qgis_processing.qgisUtils import (
     set_multiprocess_path,
     tc_from_pt_layer,
     feature_from_gdf_row,

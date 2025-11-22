@@ -1,13 +1,8 @@
-import os
-import sys
-
 import pandas as pd
 from movingpandas import TrajectoryStopDetector
 
-from qgis.PyQt.QtCore import QCoreApplication, QVariant
+from qgis.PyQt.QtCore import QVariant
 from qgis.core import (
-    QgsProcessingParameterExtent,
-    QgsProcessingParameterVectorLayer,
     QgsProcessingParameterNumber,
     QgsProcessingParameterString,
     QgsProcessingParameterFeatureSink,
@@ -17,12 +12,9 @@ from qgis.core import (
     QgsFeatureSink,
     QgsFields,
 )
-from qgis.core import QgsMessageLog, Qgis
 
-sys.path.append("..")
-
-from .trajectoriesAlgorithm import TrajectoriesAlgorithm, help_str_base
-from .qgisUtils import feature_from_gdf_row
+from qgis_processing.trajectoriesAlgorithm import TrajectoriesAlgorithm, help_str_base
+from qgis_processing.qgisUtils import feature_from_gdf_row
 
 
 class ExtractODPtsAlgorithm(TrajectoriesAlgorithm):

@@ -1,18 +1,14 @@
 import os
-import sys
 
 from qgis.PyQt.QtCore import QCoreApplication, QVariant
-from qgis.PyQt.QtGui import QIcon
 from qgis.core import (
     QgsProcessing,
     QgsProcessingAlgorithm,
     QgsProcessingParameterFeatureSink,
     QgsProcessingParameterFile,
-    QgsProcessingParameterField,
     QgsProcessingUtils,
     QgsCoordinateReferenceSystem,
     QgsWkbTypes,
-    QgsProcessingParameterString,
     QgsProcessingParameterBoolean,
     QgsField,
     QgsFields,
@@ -30,9 +26,6 @@ except ImportError as error:
         "https://github.com/Bondify/gtfs_functions."
     ) from error
 
-sys.path.append("..")
-
-from .qgisUtils import tc_from_pt_layer, feature_from_gdf_row, df_from_pt_layer
 
 pluginPath = os.path.dirname(__file__)
 

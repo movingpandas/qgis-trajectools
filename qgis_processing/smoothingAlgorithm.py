@@ -1,19 +1,12 @@
-import sys
-import pandas as pd
-
 from movingpandas import (
     KalmanSmootherCV,
 )
 
 from qgis.core import (
-    QgsProcessingParameterString,
-    QgsProcessingParameterEnum,
     QgsProcessingParameterNumber,
 )
 
-sys.path.append("..")
-
-from .trajectoriesAlgorithm import (
+from qgis_processing.trajectoriesAlgorithm import (
     TrajectoryManipulationAlgorithm,
     help_str_base,
     help_str_traj,

@@ -1,8 +1,4 @@
-import sys
-
-sys.path.append("..")
-
-from .trajectoriesAlgorithm import (
+from qgis_processing.trajectoriesAlgorithm import (
     TrajectoryManipulationAlgorithm,
     help_str_base,
     help_str_traj,

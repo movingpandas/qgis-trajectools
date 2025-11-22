@@ -1,46 +1,41 @@
 import os
-import sys
 
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtCore import QCoreApplication
 from qgis.core import Qgis, QgsProcessingProvider, QgsMessageLog
-from processing.core.ProcessingConfig import ProcessingConfig, Setting
 
-sys.path.append("..")
-
-from .createTrajectoriesAlgorithm import CreateTrajectoriesAlgorithm
-from .splitTrajectoriesAlgorithm import (
+from qgis_processing.createTrajectoriesAlgorithm import CreateTrajectoriesAlgorithm
+from qgis_processing.splitTrajectoriesAlgorithm import (
     ObservationGapSplitterAlgorithm,
     TemporalSplitterAlgorithm,
     StopSplitterAlgorithm,
     ValueChangeSplitterAlgorithm,
 )
-from .overlayAlgorithm import (
+from qgis_processing.overlayAlgorithm import (
     ClipTrajectoriesByExtentAlgorithm,
     ClipTrajectoriesByPolygonLayerAlgorithm,
     IntersectWithPolygonLayerAlgorithm,
 )
-from .extractPtsAlgorithm import (
+from qgis_processing.extractPtsAlgorithm import (
     ExtractODPtsAlgorithm,
     ExtractStopsAlgorithm,
 )
-from .generalizationAlgorithm import (
+from qgis_processing.generalizationAlgorithm import (
     DouglasPeuckerGeneralizerAlgorithm,
     MinDistanceGeneralizerAlgorithm,
     MinTimeDeltaGeneralizerAlgorithm,
     TopDownTimeRatioGeneralizerAlgorithm,
 )
-from .cleaningAlgorithm import (
+from qgis_processing.cleaningAlgorithm import (
     OutlierCleanerAlgorithm,
 )
 
 try:  # skmob-based algs
-    from .privacyAttackAlgorithm import HomeWorkAttack
+    from qgis_processing.privacyAttackAlgorithm import HomeWorkAttack
 except ImportError as e:
     QgsMessageLog.logMessage(e.msg, "Trajectools", level=Qgis.Info)
 
 try:  # gtfs_functions-based algs
-    from .gtfsAlgorithm import (
+    from qgis_processing.gtfsAlgorithm import (
         GtfsStopsAlgorithm,
         GtfsShapesAlgorithm,
         GtfsSegmentsAlgorithm,
@@ -49,7 +44,7 @@ except ImportError as e:
     QgsMessageLog.logMessage(e.msg, "Trajectools", level=Qgis.Info)
 
 try:  # stonesoup-based algs
-    from .smoothingAlgorithm import KalmanSmootherAlgorithm
+    from qgis_processing.smoothingAlgorithm import KalmanSmootherAlgorithm
 except ImportError as e:
     QgsMessageLog.logMessage(e.msg, "Trajectools", level=Qgis.Info)
 

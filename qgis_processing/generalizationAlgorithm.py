@@ -10,13 +10,12 @@ from movingpandas import (
 
 from qgis.core import (
     QgsProcessingParameterString,
-    QgsProcessingParameterEnum,
     QgsProcessingParameterNumber,
 )
 
 sys.path.append("..")
 
-from .trajectoriesAlgorithm import (
+from qgis_processing.trajectoriesAlgorithm import (
     TrajectoryManipulationAlgorithm,
     help_str_base,
     help_str_traj,

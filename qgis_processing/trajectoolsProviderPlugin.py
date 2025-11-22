@@ -1,10 +1,5 @@
-import sys
-
 from qgis.core import QgsApplication
-
-sys.path.append("..")
-
-from .trajectoolsProvider import TrajectoolsProvider
+from qgis_processing.trajectoolsProvider import TrajectoolsProvider
 
 
 class TrajectoryProviderPlugin:

@@ -1,10 +1,9 @@
 import os
-import sys
 
 from pandas import merge
 from pyproj import CRS
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtCore import QCoreApplication, QVariant
+from qgis.PyQt.QtCore import QVariant
 from qgis.core import QgsWkbTypes, QgsField, QgsProcessingUtils
 
 try:
@@ -17,10 +16,8 @@ except ImportError as error:
         "see https://github.com/scikit-mobility/scikit-mobility."
     ) from error
 
-sys.path.append("..")
-
-from .qgisUtils import tc_from_df
-from .trajectoriesAlgorithm import TrajectoryManipulationAlgorithm
+from qgis_processing.qgisUtils import tc_from_df
+from qgis_processing.trajectoriesAlgorithm import TrajectoryManipulationAlgorithm
 
 pluginPath = os.path.dirname(__file__)
 

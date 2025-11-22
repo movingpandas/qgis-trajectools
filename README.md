@@ -79,7 +79,7 @@ The individual Trajectools algorithms are flexible and modular and can therefore
 
 Please cite [0] when using Trajectools in your research and reference the appropriate release version using the Zenodo DOI: https://doi.org/10.5281/zenodo.13847642
 
-[0] [Graser, A., & Dragaschnig, M. (2024, June). Trajectools Demo: Towards No-Code Solutions for Movement Data Analytics. In 2024 25th IEEE International Conference on Mobile Data Management (MDM) (pp. 235-238). IEEE.](https://ieeexplore.ieee.org/abstract/document/10591660)
+[0] [Graser, A., & Dragaschnig, M. (2024, June). Trajectools Demo: Towards No-Code Solutions for Movement Data Analytics. In 2024 25th IEEE International Conference on Mobile Data Management (MDM) (pp. 235-238). IEEE.](https://drive.google.com/file/u/0/d/1OSzRuUwF1FwaPpl020PoDYdus4jtoqg8/view)
 
 ```
 @inproceedings{graser2024trajectools,

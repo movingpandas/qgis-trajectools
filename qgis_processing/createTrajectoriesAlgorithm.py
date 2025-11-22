@@ -2,7 +2,11 @@ import sys
 
 sys.path.append("..")
 
-from .trajectoriesAlgorithm import TrajectoryManipulationAlgorithm, help_str_base, help_str_traj
+from .trajectoriesAlgorithm import (
+    TrajectoryManipulationAlgorithm,
+    help_str_base,
+    help_str_traj,
+)
 
 
 class CreateTrajectoriesAlgorithm(TrajectoryManipulationAlgorithm):
@@ -24,7 +28,7 @@ class CreateTrajectoriesAlgorithm(TrajectoryManipulationAlgorithm):
     def shortHelpString(self):
         return self.tr(
             "<p>Creates a trajectory point layers with speed and direction information "
-            "as well as a trajectory line layer.</p>"+help_str_base+help_str_traj
+            "as well as a trajectory line layer.</p>" + help_str_base + help_str_traj
         )
 
     def helpUrl(self):

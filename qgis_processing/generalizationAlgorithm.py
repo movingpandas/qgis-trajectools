@@ -16,7 +16,11 @@ from qgis.core import (
 
 sys.path.append("..")
 
-from .trajectoriesAlgorithm import TrajectoryManipulationAlgorithm, help_str_base, help_str_traj
+from .trajectoriesAlgorithm import (
+    TrajectoryManipulationAlgorithm,
+    help_str_base,
+    help_str_traj,
+)
 
 
 class GeneralizeTrajectoriesAlgorithm(TrajectoryManipulationAlgorithm):
@@ -59,7 +63,7 @@ class DouglasPeuckerGeneralizerAlgorithm(GeneralizeTrajectoriesAlgorithm):
             "(as implemented in shapely/Geos). </p>"
             "<p>For more info see: "
             "https://movingpandas.readthedocs.io/en/main/api/trajectorygeneralizer.html</p>"
-            ""+help_str_base+help_str_traj
+            "" + help_str_base + help_str_traj
         )
 
     def processTc(self, tc, parameters, context):
@@ -99,7 +103,7 @@ class MinDistanceGeneralizerAlgorithm(GeneralizeTrajectoriesAlgorithm):
             "(e.g. EPSG:4326 WGS84) then distance is calculated in metres. </p>"
             "<p>For more info see: "
             "https://movingpandas.readthedocs.io/en/main/api/trajectorygeneralizer.html</p>"
-            ""+help_str_base+help_str_traj
+            "" + help_str_base + help_str_traj
         )
 
     def processTc(self, tc, parameters, context):
@@ -139,7 +143,7 @@ class MinTimeDeltaGeneralizerAlgorithm(GeneralizeTrajectoriesAlgorithm):
             "timedelta apart. </p>"
             "<p>For more info see: "
             "https://movingpandas.readthedocs.io/en/main/api/trajectorygeneralizer.html</p>"
-            ""+help_str_base+help_str_traj
+            "" + help_str_base + help_str_traj
         )
 
     def processTc(self, tc, parameters, context):
@@ -184,7 +188,7 @@ class TopDownTimeRatioGeneralizerAlgorithm(GeneralizeTrajectoriesAlgorithm):
             "the segment start and end times and the point time. </p>"
             "<p>For more info see: "
             "https://movingpandas.readthedocs.io/en/main/api/trajectorygeneralizer.html</p>"
-            ""+help_str_base+help_str_traj
+            "" + help_str_base + help_str_traj
         )
 
     def processTc(self, tc, parameters, context):

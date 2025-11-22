@@ -1,0 +1,10 @@
+name: trajectools
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - black
+  - movingpandas
+  - pre-commit
+  - pytest
+  - qgis

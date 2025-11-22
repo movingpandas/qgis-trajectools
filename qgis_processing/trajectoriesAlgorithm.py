@@ -25,9 +25,9 @@ sys.path.append("..")
 
 from .qgisUtils import (
     set_multiprocess_path,
-    tc_from_pt_layer, 
-    feature_from_gdf_row, 
-    df_from_pt_layer, 
+    tc_from_pt_layer,
+    feature_from_gdf_row,
+    df_from_pt_layer,
 )
 
 pluginPath = os.path.dirname(__file__)
@@ -46,18 +46,20 @@ help_str_base = (
     "assigned to a single moving object. </p>"
     "<p><b>Timestamp field</b> is the input layer field the position time. "
     "Datetime fields are preferred but we will attempt to parse string fields "
-    "using Pandas' built-in parser.</p>")
+    "using Pandas' built-in parser.</p>"
+)
 help_str_traj = (
     "<p><b>Minimum trajectory length</b> is the desired minimum length of output "
     "trajectories, calculated using CRS units, except if the CRS is geographic "
     "(e.g. EPSG:4326 WGS84) then length is calculated in meters. "
-    "(Shorter trajectories are discarded.)</p>"      
+    "(Shorter trajectories are discarded.)</p>"
     "<p><b>Speed</b> is calculated based on the input layer CRS information and "
     "converted to the desired speed units. For more info on the supported units, "
     "see https://movingpandas.org/units.</p>"
     "<p><b>Direction</b> is calculated between consecutive locations. Direction "
     "values are in degrees, starting North turning clockwise.</p>"
 )
+
 
 class TrajectoriesAlgorithm(QgsProcessingAlgorithm):
     INPUT = "INPUT"
@@ -86,7 +88,7 @@ class TrajectoriesAlgorithm(QgsProcessingAlgorithm):
 
     def flags(self):
         super().flags()
-        return  QgsProcessingAlgorithm.FlagNoThreading
+        return QgsProcessingAlgorithm.FlagNoThreading
 
     def initAlgorithm(self, config=None):
         self.addParameter(
@@ -119,7 +121,6 @@ class TrajectoriesAlgorithm(QgsProcessingAlgorithm):
             )
         )
 
-
     def create_df(self, parameters, context):
         self.prepare_parameters(parameters, context)
 
@@ -141,11 +142,15 @@ class TrajectoriesAlgorithm(QgsProcessingAlgorithm):
             parameters, self.SPEED_UNIT, context
         ).split("/")
         self.min_length = self.parameterAsDouble(parameters, self.MIN_LENGTH, context)
-        self.add_metrics = self.parameterAsBoolean(parameters, self.ADD_METRICS, context)
-        self.use_parallel = self.parameterAsBoolean(parameters, self.USE_PARALLEL_PROCESSING, context)
+        self.add_metrics = self.parameterAsBoolean(
+            parameters, self.ADD_METRICS, context
+        )
+        self.use_parallel = self.parameterAsBoolean(
+            parameters, self.USE_PARALLEL_PROCESSING, context
+        )
         if self.use_parallel:
             self.cpu_count = os.cpu_count()
-        else: 
+        else:
             self.cpu_count = 1
 
     def create_tc(self, parameters, context):
@@ -163,10 +168,18 @@ class TrajectoriesAlgorithm(QgsProcessingAlgorithm):
 
         if self.add_metrics:
             try:
-                tc.add_speed(units=tuple(self.speed_units), overwrite=True, n_processes=self.cpu_count)
+                tc.add_speed(
+                    units=tuple(self.speed_units),
+                    overwrite=True,
+                    n_processes=self.cpu_count,
+                )
                 tc.add_direction(overwrite=True, n_processes=self.cpu_count)
-            except TypeError:  # None values cause TypeError: cannot pickle 'QVariant' object, see issue #93
-                raise TypeError("TypeError: cannot pickle 'QVariant' object. This error is usually caused by None values in input layer fields. Try to remove None values or run without Add movement metrics.")
+            except (
+                TypeError
+            ):  # None values cause TypeError: cannot pickle 'QVariant' object, see issue #93
+                raise TypeError(
+                    "TypeError: cannot pickle 'QVariant' object. This error is usually caused by None values in input layer fields. Try to remove None values or run without Add movement metrics."
+                )
 
         return tc, crs
 
@@ -230,7 +243,7 @@ class TrajectoryManipulationAlgorithm(TrajectoriesAlgorithm):
                 defaultValue=True,
                 optional=False,
             )
-        )   
+        )
         self.addParameter(
             QgsProcessingParameterBoolean(
                 name=self.USE_PARALLEL_PROCESSING,
@@ -238,7 +251,7 @@ class TrajectoryManipulationAlgorithm(TrajectoriesAlgorithm):
                 defaultValue=False,
                 optional=False,
             )
-        )       
+        )
         self.addParameter(
             QgsProcessingParameterString(
                 name=self.SPEED_UNIT,
@@ -344,7 +357,7 @@ class TrajectoryManipulationAlgorithm(TrajectoriesAlgorithm):
                 continue
             except:
                 pass
-            try: 
+            try:
                 attrs.append(int(traj.df[a].iloc[0]))
                 continue
             except:
@@ -362,7 +375,7 @@ class TrajectoryManipulationAlgorithm(TrajectoriesAlgorithm):
 
         names = [field.name() for field in self.fields_pts]
         for field_name in field_names_to_add:
-            names.append(field_name)      
+            names.append(field_name)
         names.append("geometry")
         dfs = dfs[names]
 

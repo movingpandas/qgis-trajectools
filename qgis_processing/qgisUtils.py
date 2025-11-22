@@ -33,52 +33,42 @@ def set_multiprocess_path():
 
     python_path = None
     system_platform = platform.system()
-    if system_platform == 'Windows':
+    if system_platform == "Windows":
         try:
-            python_path = path.abspath(
-                path.join(sys.exec_prefix, 'pythonw.exe')
-            )
+            python_path = path.abspath(path.join(sys.exec_prefix, "pythonw.exe"))
             if path.isfile(python_path):
                 multiprocessing.set_executable(python_path)
             else:
                 # from https://trac.osgeo.org/osgeo4w/ticket/392
                 python_path = path.abspath(
-                    path.join(sys.exec_prefix, '../../bin/pythonw.exe')
+                    path.join(sys.exec_prefix, "../../bin/pythonw.exe")
                 )
                 if path.isfile(python_path):
                     multiprocessing.set_executable(python_path)
                 else:
                     qgis_utils.iface.messageBar().pushMessage(
-                        'Trajectools',
-                        QApplication.translate(
-                            'Error. Python library not found'
-                        ),
-                        level=Qgis.Info
+                        "Trajectools",
+                        QApplication.translate("Error. Python library not found"),
+                        level=Qgis.Info,
                     )
         except Exception as err:
             str(err)
-    elif system_platform == 'Darwin':
+    elif system_platform == "Darwin":
         try:
-            python_path = path.abspath(
-                path.join(sys.exec_prefix, 'bin', 'python3')
-            )
+            python_path = path.abspath(path.join(sys.exec_prefix, "bin", "python3"))
             if path.isfile(python_path):
                 multiprocessing.set_executable(python_path)
             else:
                 python_path = path.abspath(
-                    path.join(
-                        sys.exec_prefix, '../Resources/bin/python3'
-                    )
+                    path.join(sys.exec_prefix, "../Resources/bin/python3")
                 )
                 if path.isfile(python_path):
                     multiprocessing.set_executable(python_path)
                 else:
                     qgis_utils.iface.messageBar().pushMessage(
-                        'Trajectools',
-                        QApplication.translate(
-                            'Error. Python library not found'
-                        ),
-                        level=Qgis.Info
+                        "Trajectools",
+                        QApplication.translate("Error. Python library not found"),
+                        level=Qgis.Info,
                     )
         except Exception as err:
             str(err)
@@ -93,7 +83,7 @@ def trajectories_from_qgis_point_layer(
 
 def df_from_pt_layer(layer, time_field_name, trajectory_id_field):
     def to_date(dt):
-        if dt == NULL: 
+        if dt == NULL:
             return None
         if isinstance(dt, QDateTime):
             return dt.toPyDateTime()
@@ -107,7 +97,7 @@ def df_from_pt_layer(layer, time_field_name, trajectory_id_field):
         for i, a in enumerate(feature.attributes()):
             # QgsMessageLog.logMessage(f"{names[i]} | {time_field_name}", "Trajectools", level=Qgis.Info )
             if a == NULL:
-                a = None 
+                a = None
             my_dict[names[i]] = a
         pt = feature.geometry().asPoint()
         my_dict["geom_x"] = pt.x()
@@ -125,7 +115,9 @@ def tc_from_pt_layer(layer, time_field_name, trajectory_id_field, min_length=0):
 
 
 def tc_from_df(df, time_field_name, trajectory_id_field, crs, min_length=0):
-    df.drop(columns=['geometry'], inplace=True, errors='ignore'),  # Fixes Error when attribute table contains geometry column #44
+    df.drop(
+        columns=["geometry"], inplace=True, errors="ignore"
+    ),  # Fixes Error when attribute table contains geometry column #44
 
     if trajectory_id_field == "trajectory_id" and "trajectory_id" not in df.columns:
         df["trajectory_id"] = 1
@@ -160,7 +152,7 @@ def feature_from_df_row(row):
     try:
         f.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(row["geom_x"], row["geom_y"])))
     except:
-        raise(KeyError(str(row)))
+        raise (KeyError(str(row)))
     values = row.values.tolist()[:-1]
     f.setAttributes(values)
-    return f    
+    return f

@@ -116,3 +116,4 @@ venv.bak/
 .vscode/
 .vscode/settings.json
 tests/sandbox.ipynb
+symbology-style.db

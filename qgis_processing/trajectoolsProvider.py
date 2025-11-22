@@ -21,7 +21,7 @@ from .overlayAlgorithm import (
     IntersectWithPolygonLayerAlgorithm,
 )
 from .extractPtsAlgorithm import (
-    ExtractODPtsAlgorithm, 
+    ExtractODPtsAlgorithm,
     ExtractStopsAlgorithm,
 )
 from .generalizationAlgorithm import (
@@ -42,8 +42,8 @@ except ImportError as e:
 try:  # gtfs_functions-based algs
     from .gtfsAlgorithm import (
         GtfsStopsAlgorithm,
-        GtfsShapesAlgorithm, 
-        GtfsSegmentsAlgorithm
+        GtfsShapesAlgorithm,
+        GtfsSegmentsAlgorithm,
     )
 except ImportError as e:
     QgsMessageLog.logMessage(e.msg, "Trajectools", level=Qgis.Info)

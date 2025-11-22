@@ -1,9 +1,7 @@
 import sys
 import pandas as pd
 
-from movingpandas import (
-    OutlierCleaner
-)
+from movingpandas import OutlierCleaner
 
 from qgis.core import (
     QgsProcessingParameterString,
@@ -13,7 +11,11 @@ from qgis.core import (
 
 sys.path.append("..")
 
-from .trajectoriesAlgorithm import TrajectoryManipulationAlgorithm, help_str_base, help_str_traj
+from .trajectoriesAlgorithm import (
+    TrajectoryManipulationAlgorithm,
+    help_str_base,
+    help_str_traj,
+)
 
 
 class CleaningAlgorithm(TrajectoryManipulationAlgorithm):
@@ -57,12 +59,14 @@ class OutlierCleanerAlgorithm(CleaningAlgorithm):
             "the speed exceeds the provided <b>Speed threshold</b> value </p>"
             "<p>For more info see: "
             "https://movingpandas.readthedocs.io/en/main/api/trajectorycleaner.html</p>"
-            ""+help_str_base+help_str_traj
+            "" + help_str_base + help_str_traj
         )
 
     def processTc(self, tc, parameters, context):
         v_max = self.parameterAsDouble(parameters, self.TOLERANCE, context)
-        generalized = OutlierCleaner(tc).clean(v_max=v_max, units=tuple(self.speed_units))
+        generalized = OutlierCleaner(tc).clean(
+            v_max=v_max, units=tuple(self.speed_units)
+        )
         self.tc_to_sink(generalized)
         for traj in generalized:
             self.traj_to_sink(traj)

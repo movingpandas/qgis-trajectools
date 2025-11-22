@@ -13,7 +13,11 @@ from qgis.core import (
 
 sys.path.append("..")
 
-from .trajectoriesAlgorithm import TrajectoryManipulationAlgorithm, help_str_base, help_str_traj
+from .trajectoriesAlgorithm import (
+    TrajectoryManipulationAlgorithm,
+    help_str_base,
+    help_str_traj,
+)
 
 
 class SmoothingAlgorithm(TrajectoryManipulationAlgorithm):
@@ -70,13 +74,15 @@ class KalmanSmootherAlgorithm(SmoothingAlgorithm):
             "<p>Higher <b>Measurement noise</b> values lead to smoother trajectories.</p>"
             "<p>For more info see: "
             "https://movingpandas.readthedocs.io/en/main/api/trajectorysmoother.html</p>"
-            ""+help_str_base+help_str_traj
+            "" + help_str_base + help_str_traj
         )
 
     def processTc(self, tc, parameters, context):
         pn = self.parameterAsDouble(parameters, self.PROCESS_NOISE, context)
         mn = self.parameterAsDouble(parameters, self.MEASURE_NOISE, context)
-        smooth = KalmanSmootherCV(tc).smooth(process_noise_std=pn, measurement_noise_std=mn)
+        smooth = KalmanSmootherCV(tc).smooth(
+            process_noise_std=pn, measurement_noise_std=mn
+        )
         self.tc_to_sink(smooth)
         for traj in smooth:
             self.traj_to_sink(traj)

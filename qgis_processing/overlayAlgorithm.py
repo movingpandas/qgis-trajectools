@@ -13,7 +13,11 @@ from qgis.core import (
 
 sys.path.append("..")
 
-from .trajectoriesAlgorithm import TrajectoryManipulationAlgorithm, help_str_base, help_str_traj
+from .trajectoriesAlgorithm import (
+    TrajectoryManipulationAlgorithm,
+    help_str_base,
+    help_str_traj,
+)
 
 
 class OverlayTrajectoriesAlgorithm(TrajectoryManipulationAlgorithm):
@@ -51,7 +55,7 @@ class ClipTrajectoriesByExtentAlgorithm(OverlayTrajectoriesAlgorithm):
         return self.tr(
             "<p>Creates a trajectory point layers with speed and direction information "
             "as well as a trajectory line layer clipped by the specified extent.</p>"
-            ""+help_str_base+help_str_traj
+            "" + help_str_base + help_str_traj
         )
 
     def helpUrl(self):
@@ -92,7 +96,7 @@ class ClipTrajectoriesByPolygonLayerAlgorithm(OverlayTrajectoriesAlgorithm):
         return self.tr(
             "<p>Creates a trajectory point layers with speed and direction information "
             "as well as a trajectory line layer clipped by the specified vector layer.</p>"
-            ""+help_str_base+help_str_traj
+            "" + help_str_base + help_str_traj
         )
 
     def helpUrl(self):
@@ -123,13 +127,16 @@ class IntersectWithPolygonLayerAlgorithm(OverlayTrajectoriesAlgorithm):
                 optional=False,
             )
         )
-        
+
         import movingpandas as mpd
-        mpd_version  = mpd.__version__
-        if mpd_version < '0.18.0':
-            raise EnvironmentError("The Intersect trajectories with polygon layer algorithm "
-                                   "requires MovingPandas >= 0.18 "
-                                   f"but only {mpd_version} is installed.")
+
+        mpd_version = mpd.__version__
+        if mpd_version < "0.18.0":
+            raise EnvironmentError(
+                "The Intersect trajectories with polygon layer algorithm "
+                "requires MovingPandas >= 0.18 "
+                f"but only {mpd_version} is installed."
+            )
 
     def name(self):
         return "intersect_traj_vector"
@@ -141,13 +148,13 @@ class IntersectWithPolygonLayerAlgorithm(OverlayTrajectoriesAlgorithm):
         return self.tr(
             "<p>Creates a trajectory point layers with speed and direction information "
             "as well as a trajectory line layer which ihntersects the specified vector layer.</p>"
-            ""+help_str_base+help_str_traj
+            "" + help_str_base + help_str_traj
         )
 
     def helpUrl(self):
         return "https://movingpandas.org/units"
 
-    def setup_pt_sink(self, parameters, context, tc, crs):        
+    def setup_pt_sink(self, parameters, context, tc, crs):
         fields_to_add = []
         if self.add_metrics:
             fields_to_add = [
@@ -158,7 +165,7 @@ class IntersectWithPolygonLayerAlgorithm(OverlayTrajectoriesAlgorithm):
 
         vlayer = self.parameterAsVectorLayer(parameters, self.OVERLAY_LAYER, context)
         for field in vlayer.fields():
-            field.setName(f'intersecting_{field.name()}')
+            field.setName(f"intersecting_{field.name()}")
             self.fields_pts.append(field)
 
         (self.sink_pts, self.dest_pts) = self.parameterAsSink(
@@ -172,10 +179,10 @@ class IntersectWithPolygonLayerAlgorithm(OverlayTrajectoriesAlgorithm):
 
     def setup_traj_sink(self, parameters, context, crs):
         self.fields_trajs = self.get_traj_fields()
-        
+
         vlayer = self.parameterAsVectorLayer(parameters, self.OVERLAY_LAYER, context)
         for field in vlayer.fields():
-            field.setName(f'intersecting_{field.name()}')
+            field.setName(f"intersecting_{field.name()}")
             self.fields_trajs.append(field)
 
         (self.sink_trajs, self.dest_trajs) = self.parameterAsSink(
@@ -191,7 +198,7 @@ class IntersectWithPolygonLayerAlgorithm(OverlayTrajectoriesAlgorithm):
         vlayer = self.parameterAsVectorLayer(parameters, self.OVERLAY_LAYER, context)
         layer_fields = vlayer.fields()
         field_names = [field.name() for field in layer_fields]
-        field_names_to_add = [f'intersecting_{name}' for name in field_names]
+        field_names_to_add = [f"intersecting_{name}" for name in field_names]
 
         for feature in vlayer.getFeatures():
             attrs = feature.attributes()

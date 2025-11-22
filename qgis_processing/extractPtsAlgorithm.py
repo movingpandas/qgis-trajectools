@@ -62,7 +62,9 @@ class ExtractODPtsAlgorithm(TrajectoriesAlgorithm):
         return self.tr("Extract OD points")
 
     def shortHelpString(self):
-        return self.tr("<p>Extracts start and/or end points of trajectories.</p>"+help_str_base)
+        return self.tr(
+            "<p>Extracts start and/or end points of trajectories.</p>" + help_str_base
+        )
 
     def processAlgorithm(self, parameters, context, feedback):
         tc, crs = self.create_tc(parameters, context)
@@ -107,7 +109,7 @@ class ExtractODPtsAlgorithm(TrajectoriesAlgorithm):
         names.append("geometry")
         gdf = gdf[names]
         # QgsMessageLog.logMessage(str(gdf), "Trajectools", level=Qgis.Info )
-                
+
         for _, row in gdf.iterrows():
             f = feature_from_gdf_row(row)
             self.sink_orig.addFeature(f, QgsFeatureSink.FastInsert)
@@ -172,7 +174,7 @@ class ExtractStopsAlgorithm(TrajectoriesAlgorithm):
         return self.tr("Extract stop points")
 
     def shortHelpString(self):
-        return self.tr("<p>Extracts stop points from trajectories.</p>"+help_str_base)
+        return self.tr("<p>Extracts stop points from trajectories.</p>" + help_str_base)
 
     def processAlgorithm(self, parameters, context, feedback):
         tc, crs = self.create_tc(parameters, context)
@@ -202,13 +204,15 @@ class ExtractStopsAlgorithm(TrajectoriesAlgorithm):
         min_duration = self.parameterAsString(parameters, self.MIN_DURATION, context)
         min_duration = pd.Timedelta(min_duration).to_pytimedelta()
 
-        try: 
-            gdf = TrajectoryStopDetector(tc, n_processes=self.cpu_count).get_stop_points(
-                max_diameter=max_diameter, min_duration=min_duration
-            )
+        try:
+            gdf = TrajectoryStopDetector(
+                tc, n_processes=self.cpu_count
+            ).get_stop_points(max_diameter=max_diameter, min_duration=min_duration)
         except TypeError:
-            raise TypeError("TypeError: cannot pickle 'QVariant' object. This error is usually caused by None values in input layer fields. Try to remove None values or run without Add movement metrics.")
-          
+            raise TypeError(
+                "TypeError: cannot pickle 'QVariant' object. This error is usually caused by None values in input layer fields. Try to remove None values or run without Add movement metrics."
+            )
+
         gdf = gdf.convert_dtypes()
         gdf["stop_id"] = gdf.index.astype(str)
 

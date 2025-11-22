@@ -39,7 +39,7 @@ pluginPath = os.path.dirname(__file__)
 
 class GtfsStopsAlgorithm(QgsProcessingAlgorithm):
     INPUT = "INPUT"
-    OUTPUT = "OUTPUT"  
+    OUTPUT = "OUTPUT"
 
     def __init__(self):
         super().__init__()
@@ -104,12 +104,12 @@ class GtfsStopsAlgorithm(QgsProcessingAlgorithm):
             f = QgsFeature()
             f.setGeometry(pt)
             attrs = [stop.stop_id]
-            if hasattr(stop, 'stop_code'):
+            if hasattr(stop, "stop_code"):
                 attrs.append(stop.stop_code)
             else:
-                attrs.append('')
+                attrs.append("")
             attrs.append(stop.stop_name)
-            
+
             f.setAttributes(attrs)
             self.sink_stops.addFeature(f, QgsFeatureSink.FastInsert)
 
@@ -195,9 +195,7 @@ class GtfsShapesAlgorithm(QgsProcessingAlgorithm):
             line = QgsGeometry.fromWkt(shape.geometry.wkt)
             f = QgsFeature()
             f.setGeometry(line)
-            attrs = [
-                shape.shape_id
-            ]
+            attrs = [shape.shape_id]
             f.setAttributes(attrs)
             self.sink_shapes.addFeature(f, QgsFeatureSink.FastInsert)
 
@@ -343,5 +341,7 @@ class GtfsSegmentsAlgorithm(QgsProcessingAlgorithm):
 
     def postProcessAlgorithm(self, context, feedback):
         seg_layer = QgsProcessingUtils.mapLayerFromString(self.dest_segments, context)
-        seg_layer.loadNamedStyle(os.path.join(pluginPath, "styles", "gtfs-segments.qml"))
+        seg_layer.loadNamedStyle(
+            os.path.join(pluginPath, "styles", "gtfs-segments.qml")
+        )
         return {self.OUTPUT: self.dest_segments}

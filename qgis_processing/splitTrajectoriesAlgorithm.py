@@ -3,9 +3,9 @@ import sys
 import pandas as pd
 
 from movingpandas import (
-    TemporalSplitter, 
-    ObservationGapSplitter, 
-    StopSplitter, 
+    TemporalSplitter,
+    ObservationGapSplitter,
+    StopSplitter,
     ValueChangeSplitter,
 )
 
@@ -18,7 +18,11 @@ from qgis.core import (
 
 sys.path.append("..")
 
-from .trajectoriesAlgorithm import TrajectoryManipulationAlgorithm, help_str_base, help_str_traj
+from .trajectoriesAlgorithm import (
+    TrajectoryManipulationAlgorithm,
+    help_str_base,
+    help_str_traj,
+)
 
 
 class SplitTrajectoriesAlgorithm(TrajectoryManipulationAlgorithm):
@@ -41,7 +45,7 @@ class ObservationGapSplitterAlgorithm(SplitTrajectoriesAlgorithm):
         "Hours",
         "Minutes",
         "Seconds",
-        "Milliseconds"
+        "Milliseconds",
     ]
 
     def __init__(self):
@@ -63,7 +67,7 @@ class ObservationGapSplitterAlgorithm(SplitTrajectoriesAlgorithm):
                 defaultValue=3,
                 options=self.TIME_DELTA_UNITS_OPTIONS,
             )
-        )        
+        )
 
     def name(self):
         return "split_gap"
@@ -77,27 +81,27 @@ class ObservationGapSplitterAlgorithm(SplitTrajectoriesAlgorithm):
             "whenever there is a gap in the observations</p>"
             "<p>For more information on trajectory splitters see: "
             "https://movingpandas.readthedocs.io/en/main/api/trajectorysplitter.html</p>"
-            ""+help_str_base+help_str_traj
+            "" + help_str_base + help_str_traj
         )
 
     def processTc(self, tc, parameters, context):
         time_gap = self.parameterAsDouble(parameters, self.TIME_GAP, context)
         td_units = self.parameterAsInt(parameters, self.TIME_DELTA_UNITS, context)
         td_units = self.TIME_DELTA_UNITS_OPTIONS[td_units]
-        if td_units == "Weeks": 
+        if td_units == "Weeks":
             td_units = "W"
         time_gap = pd.Timedelta(f"{time_gap} {td_units}").to_pytimedelta()
 
         for traj in tc.trajectories:
-            try: 
+            try:
                 splits = ObservationGapSplitter(traj).split(
-                    gap=time_gap, 
-                    min_length=tc.min_length, 
-                    n_processes=self.cpu_count
+                    gap=time_gap, min_length=tc.min_length, n_processes=self.cpu_count
                 )
             except TypeError:
-                raise TypeError("TypeError: cannot pickle 'QVariant' object. This error is usually caused by None values in input layer fields. Try to remove None values or run without Add movement metrics.")
-        
+                raise TypeError(
+                    "TypeError: cannot pickle 'QVariant' object. This error is usually caused by None values in input layer fields. Try to remove None values or run without Add movement metrics."
+                )
+
             self.tc_to_sink(splits)
             for split in splits:
                 self.traj_to_sink(split)
@@ -139,7 +143,7 @@ class TemporalSplitterAlgorithm(SplitTrajectoriesAlgorithm):
             "using regular time intervals (year, month, day, hour). </p>"
             "<p>For more information on trajectory splitters see: "
             "https://movingpandas.readthedocs.io/en/main/trajectorysplitter.html</p>"
-            ""+help_str_base+help_str_traj
+            "" + help_str_base + help_str_traj
         )
 
     def processTc(self, tc, parameters, context):
@@ -147,12 +151,12 @@ class TemporalSplitterAlgorithm(SplitTrajectoriesAlgorithm):
         split_mode = self.SPLIT_MODE_OPTIONS[split_mode]
         try:
             splits = TemporalSplitter(tc).split(
-                    mode=split_mode, 
-                    min_length=tc.min_length, 
-                    n_processes=self.cpu_count
-                )    
+                mode=split_mode, min_length=tc.min_length, n_processes=self.cpu_count
+            )
         except TypeError:
-            raise TypeError("TypeError: cannot pickle 'QVariant' object. This error is usually caused by None values in input layer fields. Try to remove None values or run without Add movement metrics.")
+            raise TypeError(
+                "TypeError: cannot pickle 'QVariant' object. This error is usually caused by None values in input layer fields. Try to remove None values or run without Add movement metrics."
+            )
         self.tc_to_sink(splits)
         for split in splits:
             self.traj_to_sink(split)
@@ -198,22 +202,24 @@ class StopSplitterAlgorithm(SplitTrajectoriesAlgorithm):
             "<p>Splits trajectories into subtrajectories at stops. </p>"
             "<p>For more information on trajectory splitters see: "
             "https://movingpandas.readthedocs.io/en/main/trajectorysplitter.html</p>"
-            ""+help_str_base+help_str_traj
+            "" + help_str_base + help_str_traj
         )
 
     def processTc(self, tc, parameters, context):
         max_diameter = self.parameterAsDouble(parameters, self.MAX_DIAMETER, context)
         min_duration = self.parameterAsString(parameters, self.MIN_DURATION, context)
         min_duration = pd.Timedelta(min_duration).to_pytimedelta()
-        try: 
+        try:
             splits = StopSplitter(tc).split(
-                max_diameter=max_diameter, 
-                min_duration=min_duration, 
-                min_length=tc.min_length, 
-                n_processes=self.cpu_count
+                max_diameter=max_diameter,
+                min_duration=min_duration,
+                min_length=tc.min_length,
+                n_processes=self.cpu_count,
             )
         except TypeError:
-            raise TypeError("TypeError: cannot pickle 'QVariant' object. This error is usually caused by None values in input layer fields. Try to remove None values or run without Add movement metrics.")
+            raise TypeError(
+                "TypeError: cannot pickle 'QVariant' object. This error is usually caused by None values in input layer fields. Try to remove None values or run without Add movement metrics."
+            )
 
         self.tc_to_sink(splits)
         for split in splits:
@@ -251,20 +257,22 @@ class ValueChangeSplitterAlgorithm(SplitTrajectoriesAlgorithm):
             "whenever there is a change in the specified field's value.</p>"
             "<p>For more information on trajectory splitters see: "
             "https://movingpandas.readthedocs.io/en/main/api/trajectorysplitter.html</p>"
-            ""+help_str_base+help_str_traj         
+            "" + help_str_base + help_str_traj
         )
 
     def processTc(self, tc, parameters, context):
         self.field = self.parameterAsFields(parameters, self.FIELD, context)[0]
         for traj in tc.trajectories:
-            try: 
+            try:
                 splits = ValueChangeSplitter(traj).split(
-                    col_name=self.field, 
-                    min_length=tc.min_length, 
-                    n_processes=self.cpu_count
+                    col_name=self.field,
+                    min_length=tc.min_length,
+                    n_processes=self.cpu_count,
                 )
             except TypeError:
-                raise TypeError("TypeError: cannot pickle 'QVariant' object. This error is usually caused by None values in input layer fields. Try to remove None values or run without Add movement metrics.")
+                raise TypeError(
+                    "TypeError: cannot pickle 'QVariant' object. This error is usually caused by None values in input layer fields. Try to remove None values or run without Add movement metrics."
+                )
 
             self.tc_to_sink(splits)
             for split in splits:

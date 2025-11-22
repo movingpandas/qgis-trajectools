@@ -172,8 +172,8 @@ class TrajectoriesAlgorithm(QgsProcessingAlgorithm):
                 )
                 tc.add_direction(overwrite=True, n_processes=self.cpu_count)
             except (
-                TypeError  # None values cause TypeError: cannot pickle 'QVariant' object, see issue #93   # noqa E501
-            ):  
+                TypeError
+            ):  # None values cause TypeError: cannot pickle 'QVariant' object, see issue #93   # noqa E501
                 raise TypeError(
                     "TypeError: cannot pickle 'QVariant' object. This error is usually caused by None values in input layer fields. Try to remove None values or run without Add movement metrics."  # noqa E501
                 )

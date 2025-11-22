@@ -58,11 +58,11 @@ class KalmanSmootherAlgorithm(SmoothingAlgorithm):
 
     def shortHelpString(self):
         return self.tr(
-            "<p>Smooths trajectories using a Kalman Filter with a Constant Velocity " 
+            "<p>Smooths trajectories using a Kalman Filter with a Constant Velocity "
             "model. "
             "The Constant Velocity model assumes that the speed between consecutive "
-            "locations is nearly constant. For trajectories where traj.is_latlon = " 
-            "True the smoother converts to EPSG:3395 (World Mercator) internally to " 
+            "locations is nearly constant. For trajectories where traj.is_latlon = "
+            "True the smoother converts to EPSG:3395 (World Mercator) internally to "
             "perform filtering and smoothing. "
             "<p>Higher <b>Process noise</b> values lead to less-smooth trajectories.</p>"  # noqa E501
             "<p>Higher <b>Measurement noise</b> values lead to smoother trajectories.</p>"  # noqa E501

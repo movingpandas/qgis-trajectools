@@ -29,7 +29,7 @@ MIN_MPD_VERSION = "0.22.3"
 if Version(mpd_version) < Version(MIN_MPD_VERSION):
     raise (RuntimeError(f"Please update MovingPandas to >={MIN_MPD_VERSION}"))
 
-from qgis_processing.trajectoolsProviderPlugin import TrajectoryProviderPlugin
+from qgis_processing.trajectoolsProviderPlugin import TrajectoryProviderPlugin  # noqa E402
 
 
 def classFactory(iface):

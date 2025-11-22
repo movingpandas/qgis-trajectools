@@ -46,9 +46,9 @@ def set_multiprocess_path():
                 else:
                     qgis_utils.iface.messageBar().pushMessage(  # noqa F821
                         "Trajectools",
-                        QApplication.translate(
+                        QApplication.translate(  # noqa F821
                             "Error. Python library not found"
-                        ),  # noqa F821
+                        ),
                         level=Qgis.Info,
                     )
         except Exception as err:
@@ -67,9 +67,9 @@ def set_multiprocess_path():
                 else:
                     qgis_utils.iface.messageBar().pushMessage(  # noqa F821
                         "Trajectools",
-                        QApplication.translate(
+                        QApplication.translate(  # noqa F821
                             "Error. Python library not found"
-                        ),  # noqa F821
+                        ),
                         level=Qgis.Info,
                     )
         except Exception as err:

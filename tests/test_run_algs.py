@@ -9,7 +9,7 @@ TESTDATA = "./sample_data/geolife.gpkg"
 
 
 def test_run_buffer_algorithm():
-    # This test just checks that processing algorithms can be 
+    # This test just checks that processing algorithms can be
     # run without errors.
     Processing.initialize()
 

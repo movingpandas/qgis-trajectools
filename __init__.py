@@ -22,7 +22,6 @@ __date__ = "Sep 2025"
 __copyright__ = "(c) 2025, Anita Graser"
 __name__ = "trajectools"
 
-import sys
 from packaging.version import Version
 from movingpandas import __version__ as mpd_version
 
@@ -30,7 +29,6 @@ MIN_MPD_VERSION = "0.22.3"
 if Version(mpd_version) < Version(MIN_MPD_VERSION):
     raise (RuntimeError(f"Please update MovingPandas to >={MIN_MPD_VERSION}"))
 
-sys.path.append('..')
 from .qgis_processing.trajectoolsProviderPlugin import TrajectoryProviderPlugin  # noqa E402
 
 

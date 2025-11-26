@@ -13,8 +13,8 @@ from qgis.core import (
     QgsFields,
 )
 
-from qgis_processing.trajectoriesAlgorithm import TrajectoriesAlgorithm, help_str_base
-from qgis_processing.qgisUtils import feature_from_gdf_row
+from .trajectoriesAlgorithm import TrajectoriesAlgorithm, help_str_base
+from .qgisUtils import feature_from_gdf_row
 
 
 class ExtractODPtsAlgorithm(TrajectoriesAlgorithm):

@@ -16,8 +16,8 @@ except ImportError as error:
         "see https://github.com/scikit-mobility/scikit-mobility."
     ) from error
 
-from qgis_processing.qgisUtils import tc_from_df
-from qgis_processing.trajectoriesAlgorithm import TrajectoryManipulationAlgorithm
+from .qgisUtils import tc_from_df
+from .trajectoriesAlgorithm import TrajectoryManipulationAlgorithm
 
 pluginPath = os.path.dirname(__file__)
 

@@ -1,5 +1,5 @@
 from qgis.core import QgsApplication
-from qgis_processing.trajectoolsProvider import TrajectoolsProvider
+from .trajectoolsProvider import TrajectoolsProvider
 
 
 class TrajectoryProviderPlugin:

@@ -14,7 +14,7 @@ from qgis.core import (
     QgsProcessingParameterField,
 )
 
-from qgis_processing.trajectoriesAlgorithm import (
+from .trajectoriesAlgorithm import (
     TrajectoryManipulationAlgorithm,
     help_str_base,
     help_str_traj,
@@ -257,7 +257,7 @@ class ValueChangeSplitterAlgorithm(SplitTrajectoriesAlgorithm):
         )
 
     def processTc(self, tc, parameters, context):
-        self.field = self.parameterAsFields(parameters, self.FIELD, context)[0]
+        self.field = self.parameterAsStrings(parameters, self.FIELD, context)[0]
         for traj in tc.trajectories:
             try:
                 splits = ValueChangeSplitter(traj).split(

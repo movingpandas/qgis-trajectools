@@ -1,6 +1,6 @@
 import os
 
-from qgis.PyQt.QtCore import QCoreApplication, QVariant, QDateTime
+from qgis.PyQt.QtCore import QCoreApplication, QMetaType, QDateTime
 from qgis.PyQt.QtGui import QIcon
 from qgis.core import (
     QgsProcessing,
@@ -20,7 +20,7 @@ from qgis.core import (
     QgsFeatureSink,
 )
 
-from qgis_processing.qgisUtils import (
+from .qgisUtils import (
     set_multiprocess_path,
     tc_from_pt_layer,
     feature_from_gdf_row,
@@ -129,10 +129,10 @@ class TrajectoriesAlgorithm(QgsProcessingAlgorithm):
 
     def prepare_parameters(self, parameters, context):
         self.input_layer = self.parameterAsSource(parameters, self.INPUT, context)
-        self.traj_id_field = self.parameterAsFields(
+        self.traj_id_field = self.parameterAsStrings(
             parameters, self.TRAJ_ID_FIELD, context
         )[0]
-        self.timestamp_field = self.parameterAsFields(
+        self.timestamp_field = self.parameterAsStrings(
             parameters, self.TIMESTAMP_FIELD, context
         )[0]
         self.speed_units = self.parameterAsString(
@@ -189,9 +189,9 @@ class TrajectoriesAlgorithm(QgsProcessingAlgorithm):
                 continue  # Fixes Error when attribute table contains geometry column #44  # noqa E501
             elif field.name() == self.traj_id_field:
                 # we need to make sure the ID field is String
-                fields.append(QgsField(self.traj_id_field, QVariant.String))
+                fields.append(QgsField(self.traj_id_field, QMetaType.QString))
             elif field.name() == self.timestamp_field:
-                fields.append(QgsField(self.timestamp_field, QVariant.DateTime))
+                fields.append(QgsField(self.timestamp_field, QMetaType.QDateTime))
             else:
                 fields.append(field)
         for field in fields_to_add:
@@ -275,7 +275,7 @@ class TrajectoryManipulationAlgorithm(TrajectoriesAlgorithm):
         return {self.OUTPUT_PTS: self.dest_pts, self.OUTPUT_TRAJS: self.dest_trajs}
 
     def setup_traj_sink(self, parameters, context, crs):
-        self.fields_to_add = self.parameterAsFields(
+        self.fields_to_add = self.parameterAsStrings(
             parameters, self.FIELDS_TO_ADD, context
         )
         self.fields_trajs = self.get_traj_fields(fields_to_add=self.fields_to_add)
@@ -292,8 +292,8 @@ class TrajectoryManipulationAlgorithm(TrajectoriesAlgorithm):
         fields_to_add = []
         if self.add_metrics:
             fields_to_add = [
-                QgsField(tc.get_speed_col(), QVariant.Double),
-                QgsField(tc.get_direction_col(), QVariant.Double),
+                QgsField(tc.get_speed_col(), QMetaType.Double),
+                QgsField(tc.get_direction_col(), QMetaType.Double),
             ]
         self.fields_pts = self.get_pt_fields(fields_to_add)
         (self.sink_pts, self.dest_pts) = self.parameterAsSink(
@@ -320,12 +320,12 @@ class TrajectoryManipulationAlgorithm(TrajectoriesAlgorithm):
         length_units = f"{self.speed_units[0]}"
         speed_units = f"{self.speed_units[0]}{self.speed_units[1]}"
         fields = QgsFields()
-        fields.append(QgsField(self.traj_id_field, QVariant.String))
-        fields.append(QgsField("start_time", QVariant.DateTime))
-        fields.append(QgsField("end_time", QVariant.DateTime))
-        fields.append(QgsField("duration_seconds", QVariant.Double))
-        fields.append(QgsField(f"length_{length_units}", QVariant.Double))
-        fields.append(QgsField(f"speed_{speed_units}", QVariant.Double))
+        fields.append(QgsField(self.traj_id_field, QMetaType.QString))
+        fields.append(QgsField("start_time", QMetaType.QDateTime))
+        fields.append(QgsField("end_time", QMetaType.QDateTime))
+        fields.append(QgsField("duration_seconds", QMetaType.Double))
+        fields.append(QgsField(f"length_{length_units}", QMetaType.Double))
+        fields.append(QgsField(f"speed_{speed_units}", QMetaType.Double))
         for field in fields_to_add:
             if isinstance(field, str):
                 if fields.indexFromName(field) < 0:

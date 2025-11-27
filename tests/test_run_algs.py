@@ -5,7 +5,8 @@ from processing.core.Processing import Processing
 from qgis_processing.trajectoolsProvider import TrajectoolsProvider
 
 
-TESTDATA = "./sample_data/geolife.gpkg"
+TEST_DATA = "./sample_data/geolife.gpkg"
+TEST_OVERLAY = "./sample_data/polys.geojson"
 
 
 def test_run_buffer_algorithm():
@@ -17,7 +18,7 @@ def test_run_buffer_algorithm():
         "DISSOLVE": False,
         "DISTANCE": 1,
         "END_CAP_STYLE": 0,  # Round
-        "INPUT": TESTDATA,
+        "INPUT": TEST_DATA,
         "JOIN_STYLE": 0,  # Round
         "MITER_LIMIT": 2,
         "SEGMENTS": 5,
@@ -36,7 +37,7 @@ def test_run_create_trajectory_algorithm():
     #        print(alg.id(), "--->", alg.displayName())
 
     alg_params = {
-        "INPUT": TESTDATA,
+        "INPUT": TEST_DATA,
         "TRAJ_ID_FIELD": "trajectory_id",
         "TIME_FIELD": "t",
         "OUTPUT_PTS": "TEMPORARY_OUTPUT",
@@ -47,7 +48,10 @@ def test_run_create_trajectory_algorithm():
         "SPEED_UNIT": "km/h",
         "MIN_LENGTH": 0,
     }
-    run("Trajectory:create_trajectory", alg_params)
+    results = run("Trajectory:create_trajectory", alg_params)
+    assert "OUTPUT_PTS" in results
+    assert "OUTPUT_TRAJS" in results
+    assert results["OUTPUT_TRAJS"].featureCount() == 5
 
 
 def test_run_create_trajectory_with_wrong_time_field():
@@ -56,7 +60,7 @@ def test_run_create_trajectory_with_wrong_time_field():
     QgsApplication.processingRegistry().addProvider(provider)
 
     alg_params = {
-        "INPUT": TESTDATA,
+        "INPUT": TEST_DATA,
         "TRAJ_ID_FIELD": "trajectory_id",
         "TIME_FIELD": "txxx",
         "OUTPUT_PTS": "TEMPORARY_OUTPUT",
@@ -69,3 +73,26 @@ def test_run_create_trajectory_with_wrong_time_field():
     }
     with pytest.raises(QgsProcessingException):
         run("Trajectory:create_trajectory", alg_params)
+
+def test_run_clip_traj_vector():
+    Processing.initialize()
+    provider = TrajectoolsProvider()
+    QgsApplication.processingRegistry().addProvider(provider)
+
+    alg_params = {
+        'INPUT':TEST_DATA,
+        'TRAJ_ID_FIELD':'trajectory_id',
+        'TIME_FIELD':'t',
+        'OUTPUT_PTS':'TEMPORARY_OUTPUT',
+        'OUTPUT_TRAJS':'TEMPORARY_OUTPUT',
+        'FIELDS_TO_ADD':[],
+        'ADD_METRICS':True,
+        'USE_PARALLEL_PROCESSING':False,
+        'SPEED_UNIT':'km/h',
+        'MIN_LENGTH':0,
+        'OVERLAY_LAYER':TEST_OVERLAY
+    }
+    results = run("Trajectory:clip_traj_vector", alg_params)
+    assert "OUTPUT_PTS" in results
+    assert "OUTPUT_TRAJS" in results
+    assert results["OUTPUT_TRAJS"].featureCount() == 10

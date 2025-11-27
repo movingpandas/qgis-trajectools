@@ -12,7 +12,7 @@ steps:
       - python -m flake8 . --count --show-source --statistics
 
   pytest:
-    image: python:${TAG}-buster
+    image: python:${TAG}
     when:
       event: pull_request
       branch: main
@@ -27,5 +27,5 @@ steps:
 
 matrix:
   TAG:
-    - 3.9
-    - 3.12.0b2
+    - 3.12.12
+    - latest

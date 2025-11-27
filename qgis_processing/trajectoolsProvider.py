@@ -3,39 +3,39 @@ import os
 from qgis.PyQt.QtGui import QIcon
 from qgis.core import Qgis, QgsProcessingProvider, QgsMessageLog
 
-from qgis_processing.createTrajectoriesAlgorithm import CreateTrajectoriesAlgorithm
-from qgis_processing.splitTrajectoriesAlgorithm import (
+from .createTrajectoriesAlgorithm import CreateTrajectoriesAlgorithm
+from .splitTrajectoriesAlgorithm import (
     ObservationGapSplitterAlgorithm,
     TemporalSplitterAlgorithm,
     StopSplitterAlgorithm,
     ValueChangeSplitterAlgorithm,
 )
-from qgis_processing.overlayAlgorithm import (
+from .overlayAlgorithm import (
     ClipTrajectoriesByExtentAlgorithm,
     ClipTrajectoriesByPolygonLayerAlgorithm,
     IntersectWithPolygonLayerAlgorithm,
 )
-from qgis_processing.extractPtsAlgorithm import (
+from .extractPtsAlgorithm import (
     ExtractODPtsAlgorithm,
     ExtractStopsAlgorithm,
 )
-from qgis_processing.generalizationAlgorithm import (
+from .generalizationAlgorithm import (
     DouglasPeuckerGeneralizerAlgorithm,
     MinDistanceGeneralizerAlgorithm,
     MinTimeDeltaGeneralizerAlgorithm,
     TopDownTimeRatioGeneralizerAlgorithm,
 )
-from qgis_processing.cleaningAlgorithm import (
+from .cleaningAlgorithm import (
     OutlierCleanerAlgorithm,
 )
 
 try:  # skmob-based algs
-    from qgis_processing.privacyAttackAlgorithm import HomeWorkAttack
+    from .privacyAttackAlgorithm import HomeWorkAttack
 except ImportError as e:
     QgsMessageLog.logMessage(e.msg, "Trajectools", level=Qgis.Info)
 
 try:  # gtfs_functions-based algs
-    from qgis_processing.gtfsAlgorithm import (
+    from .gtfsAlgorithm import (
         GtfsStopsAlgorithm,
         GtfsShapesAlgorithm,
         GtfsSegmentsAlgorithm,
@@ -44,7 +44,7 @@ except ImportError as e:
     QgsMessageLog.logMessage(e.msg, "Trajectools", level=Qgis.Info)
 
 try:  # stonesoup-based algs
-    from qgis_processing.smoothingAlgorithm import KalmanSmootherAlgorithm
+    from .smoothingAlgorithm import KalmanSmootherAlgorithm
 except ImportError as e:
     QgsMessageLog.logMessage(e.msg, "Trajectools", level=Qgis.Info)
 

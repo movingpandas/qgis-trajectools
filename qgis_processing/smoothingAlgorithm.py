@@ -6,7 +6,7 @@ from qgis.core import (
     QgsProcessingParameterNumber,
 )
 
-from qgis_processing.trajectoriesAlgorithm import (
+from .trajectoriesAlgorithm import (
     TrajectoryManipulationAlgorithm,
     help_str_base,
     help_str_traj,
